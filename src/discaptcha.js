@@ -18,7 +18,7 @@ if (fs.existsSync(configPath)) {
   if (
     typeof config !== 'object' ||
     typeof config.clientOptions !== 'object' ||
-    typeof config.timeToVerifyInMs !== 'string' ||
+    typeof config.timeToVerifyInMs !== 'number' ||
     typeof config.guilds !== 'object'
   ) {
     log(`${configPath} is not correctly constructed. See readme for steps to properly create the config.json.`);
