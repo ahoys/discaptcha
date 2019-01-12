@@ -13,10 +13,15 @@ This may change in the future as the bot matures.
 
 1. [Install Node.js.](https://nodejs.org/en/)
 2. [Create and register your Discord bot.](https://discordapp.com/developers/applications/)
-3. Download this repository and extract it to somewhere (releases coming after the bot matures).
+3. [Download the newest Discaptcha release.](https://github.com/ahoys/discaptcha/releases) and extract it.
 4. Open a command prompt or similar and run `npm install` in the same folder as where the extracted files are.
 5. Configure the bot, see the configuration chapter below.
 6. Use command `npm start` to run the bot.
+7. Invite the bot to your servers with a web browser. Use the following url: https://discordapp.com/oauth2/authorize?&client_id=YOUR_APP_CLIENT_ID_HERE&scope=bot&permissions=0 (Replace YOUR_APP_CLIENT_ID_HERE with the application id of the bot (see step 2)).
+
+That's all. Discaptcha is now functional. Type `@Discaptcha help` for a list of commands. You must always mention Discaptcha to activate a command. Discaptcha does not read or save other messages.
+
+Tip: Use a separate hidden channel to control your bots.
 
 ## Configuration
 All configuration is done to the configs/auth.json and configs/config.json files. You should revise them before using the bot.
