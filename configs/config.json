@@ -1,0 +1,21 @@
+{
+  "clientOptions": {},
+  "timeToVerifyInMs": 60000,
+  "guilds": {
+    "277194040401854464": {
+      "description": "Tunneler",
+      "verificationRoleId": "533366845496098830",
+      "moderatorRoleId": "533683841777401856"
+    },
+    "106724985292193792": {
+      "description": "Kyllikki",
+      "verificationRoleId": "533366845496098830",
+      "moderatorRoleId": "106725431218044928"
+    },
+    "107493413754003456": {
+      "description": "Chivalry",
+      "verificationRoleId": "533683483772452865",
+      "moderatorRoleId": "533684032937000960"
+    }
+  }
+}

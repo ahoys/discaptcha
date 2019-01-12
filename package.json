@@ -1,0 +1,19 @@
+{
+  "name": "discaptcha",
+  "version": "1.0.0",
+  "description": "Discaptcha barricades your Discord server against unwanted bots.",
+  "author": "Raunhofer",
+  "license": "MIT",
+  "scripts": {
+    "start": "node src/discaptcha.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "debug": "^4.1.1",
+    "discord.js": "^11.4.2",
+    "immutable": "^4.0.0-rc.12"
+  },
+  "devDependencies": {
+    "jest": "^23.6.0"
+  }
+}
