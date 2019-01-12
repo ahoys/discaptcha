@@ -33,11 +33,11 @@ An example configuration for the auth.json is following:
 }
 ```
 
-*token:* Bot's token (don't share this with anyone!).
+**token:** Bot's token (don't share this with anyone!).
 
-*id:* Bot's client id.
+**id:** Bot's client id.
 
-*owner:* Owner's client id (your id).
+**owner:** Owner's client id (your id).
 
 Token and id information can be found from here: [https://discordapp.com/developers/applications/](https://discordapp.com/developers/applications/).
 
@@ -66,16 +66,16 @@ An example configuration for the config.json is following:
 }
 ```
 
-*clientOptions:* Advanced options for initializing connection with Discord. You can safely leave it empty {}.
+**clientOptions:** Advanced options for initializing connection with Discord. You can safely leave it empty {}.
 
-*timeToVerifyInMs:* How much time the client has before he is kicked out as a bot. Time is in milliseconds (1000ms is 1s).
+**timeToVerifyInMs:** How much time the client has before he is kicked out as a bot. Time is in milliseconds (1000ms is 1s).
 
-*guilds:* Mandatory server-specific options (guild means server in Discord-world).
+**guilds:** Mandatory server-specific options (guild means server in Discord-world).
 
-*description:* This doesn't really do anything. It only helps you to distinct the servers from each other.
+**description:** This doesn't really do anything. It only helps you to distinct the servers from each other.
 
-*verificationRoleId:* Id of the role that is given to the verified clients.
+**verificationRoleId:** Id of the role that is given to the verified clients.
 
-*moderatorRoleId:* Id of the role that moderators use (this is optional, you don't have to have moderators).
+**moderatorRoleId:** Id of the role that moderators use (this is optional, you don't have to have moderators).
 
 Tip: you can find out role id by mentioning it with a backwards-slash: `\@myrole`. The role must be set mentionable. Ids have only numbers.
