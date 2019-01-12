@@ -75,16 +75,17 @@ module.exports = {
     mustVerify: false,
     verifyMessage: '',
   },
-  restart: {
-    execute: require('./command.restart'),
-    description: 'Restarts the bot.',
-    permissions: {
-      owner: false,
-      moderator: false,
-    },
-    mustVerify: true,
-    verifyMessage: 'Are you sure? This will cause some of the on-going verifications to fail.',
-  },
+  // TODO: requires Node clusters.
+  // restart: {
+  //   execute: require('./command.restart'),
+  //   description: 'Restarts the bot.',
+  //   permissions: {
+  //     owner: false,
+  //     moderator: false,
+  //   },
+  //   mustVerify: true,
+  //   verifyMessage: 'Are you sure? This will cause some of the on-going verifications to fail.',
+  // },
   role: {
     execute: require('./command.role'),
     description: 'Replies with the current verification role. You can set the role by adding the role id after the command.\n\nExample 1: role\nExample 2: role 123456789.',
