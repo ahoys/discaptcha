@@ -1,6 +1,6 @@
 # Discaptcha
 
-![alt text](https://github.com/ahoys/dispatcha/tree/master/src/assets/avatar.png "Discaptcha")
+![alt text](https://github.com/ahoys/discaptcha/blob/master/src/assets/avatar.png "Discaptcha")
 
 A standalone bot built against "join, spam & leave" type of spam bots that are very common in Discord.
 
