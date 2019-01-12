@@ -104,31 +104,3 @@ Client.on('ready', () => {
     verifyUtil.verifyClient(GuildMember);
   });
 });
-
-/**
- * Gives the verified role to everyone.
- * @param {*} Guild 
- */
-const verifyAll = (Guild) => {
-  const { role } = config.captcha.typeEmoji;
-  const { roles, members } = Guild;
-  const requestedRole = roles.find(r => String(r.id) === String(role));
-  if (requestedRole) {
-    log(`Giving roles to everyone in ${Guild.id}...`);
-    const membersArr = members.array();
-    const size = membersArr.length;
-    let i = 0;
-    const addRole = (member) => {
-      member.addRole(requestedRole, 'Verified human')
-        .then(() => {
-          i += 1;
-          if (size > i) {
-            addRole(membersArr[i]);
-          } else {
-            log(`Verified ${i} clients.`);
-          }
-        });
-    };
-    addRole(membersArr[i]);
-  }
-};
