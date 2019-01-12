@@ -25,11 +25,13 @@ All configuration is done to the configs/auth.json and configs/config.json files
 This configuration file is used to authorize your bot against Discord. If the file does not exist in the /configs folder, create it. The file extension must be json!
 
 An example configuration for the auth.json is following:
-```{
+```
+{
   "token": "KSJFUDIAODI2NTM1MjkyOTM4.DxsMDexampleA0M7Epfyh7KP43kMdKLD92",
   "id": "123456789012345678",
   "owner": "876543210987654321"
-}```
+}
+```
 
 *token:* Bot's token (don't share this with anyone!).
 
@@ -45,7 +47,8 @@ To obtain your own id (owner), you can right click your name in Discord and sele
 This configuration file is used to setup the guilds and bot behaviour.
 
 An example configuration for the config.json is following:
-```{
+```
+{
   "clientOptions": {},
   "timeToVerifyInMs": 60000,
   "guilds": {
@@ -60,7 +63,8 @@ An example configuration for the config.json is following:
       "moderatorRoleId": "MODERATOR_ROLE_ID_HERE (optional)"
     }
   }
-}```
+}
+```
 
 *clientOptions:* Advanced options for initializing connection with Discord. You can safely leave it empty {}.
 
