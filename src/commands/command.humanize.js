@@ -8,7 +8,7 @@ module.exports = (Client, Message) => {
   try {
     const { guild } = Message;
     const { id, roles, members } = guild;
-    const roleId = config[id].verificationRoleId;
+    const roleId = config.guilds[id].verificationRoleId;
     const requestedRole = roles.find(r => String(r.id) === String(roleId));
     if (requestedRole) {
       const membersArr = members.array();
