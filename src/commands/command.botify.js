@@ -1,5 +1,4 @@
 const log = require('debug')('command.botify');
-const auth = require('../../configs/auth.json');
 const config = require('../../configs/config.json');
 
 /**
