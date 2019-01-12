@@ -1,6 +1,9 @@
 const log = require('debug')('command.unverified');
 const config = require('../../configs/config.json');
 
+/**
+ * Lists all clients that do not have the verification role.
+ */
 module.exports = (Client, Message) => {
   try {
     const { guild } = Message;
