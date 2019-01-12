@@ -15,16 +15,6 @@ module.exports = {
     // A message that is sent to verify the command.
     verifyMessage: 'Are you sure? This may prevent the users from speaking.',
   },
-  broadcast: {
-    execute: require('./command.broadcast'),
-    description: 'Sends a global message to all guild owners.',
-    permissions: {
-      owner: false,
-      moderator: false,
-    },
-    mustVerify: true,
-    verifyMessage: 'Are you sure? This will be sent to all guild owners.',
-  },
   exit: {
     execute: require('./command.exit'),
     description: 'Kills the bot. The bot must be manually restarted.',
