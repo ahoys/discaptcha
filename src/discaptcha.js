@@ -73,6 +73,11 @@ Client.on('ready', () => {
   log('Successfully connected to Discord!');
   log(`Username: ${Client.user.username}, id: ${Client.user.id}, verified: ${Client.user.verified}.`);
   log('Waiting for events...');
+
+  /**
+   * on.message
+   * Triggers every time the bot sees a new message.
+   */
   Client.on('message', (Message) => {
     if (
       // Make sure the bot is mentioned.
@@ -100,6 +105,11 @@ Client.on('ready', () => {
       }
     }
   });
+
+  /**
+   * on.guildMemberAdd
+   * Triggers every time a new client joins the server (guild).
+   */
   Client.on('guildMemberAdd', (GuildMember) => {
     verifyUtil.verifyClient(GuildMember);
   });
