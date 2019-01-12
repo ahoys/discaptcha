@@ -11,9 +11,9 @@ This may change in the future as the bot matures.
 
 ## Installation
 
-1. [Install Node.js.](https://nodejs.org/en/) (stable version is OK)
+1. [Install Node.js.](https://nodejs.org/en/)
 2. [Create and register your Discord bot.](https://discordapp.com/developers/applications/)
-3. Download this repository and extract it to somewhere.
+3. Download this repository and extract it to somewhere (releases coming after the bot matures).
 4. Open a command prompt or similar and run `npm install` in the same folder as where the extracted files are.
 5. Configure the bot, see the configuration chapter below.
 6. Use command `npm start` to run the bot.
