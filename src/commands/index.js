@@ -13,7 +13,7 @@ module.exports = {
     // before it is executed.
     mustVerify: true,
     // A message that is sent to verify the command.
-    verifyMessage: 'Are you sure? This may prevent the users from speaking.',
+    verifyMessage: 'Are you sure? This may prevent the users from speaking. This command may take a long time to execute on large servers.',
   },
   exit: {
     execute: require('./command.exit'),
@@ -43,7 +43,7 @@ module.exports = {
       moderator: true,
     },
     mustVerify: true,
-    verifyMessage: 'Are you sure? This can give unwanted permissions to bots.',
+    verifyMessage: 'Are you sure? This can give unwanted permissions to bots. This command may take a long time to execute on large servers.',
   },
   // TODO: requires a robust solution to kick everyone. See utilities/util.guild.
   // kick: {
