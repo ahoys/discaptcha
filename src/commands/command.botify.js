@@ -6,17 +6,17 @@ const log = require('debug')('command.botify');
  */
 module.exports = (Client, Message, value = '') => {
   try {
-    const verifiedRole = guildUtil.getVerificationRoleOfGuild(Message.guild);
-    if (verifiedRole) {
-      Message.guild
-        .fetchMembers()
-        .then((Guild) => {
+    const Role = guildUtil.getVerificationRoleOfGuild(Message.guild);
+    if (Role) {
+      guildUtil
+        .getGuildMembersWithOrWithoutRole(Message.guild, true, Role)
+        .then((GuildMembers) => {
           guildUtil
             .adjustRoleOfMembers(
               false,
-              verifiedRole,
-              Guild.members,
-              `Botify triggered by ${Message.author.username}`,
+              Role,
+              GuildMembers,
+              `Botify triggered by ${Message.author.username}.`
             )
               .then((count) => {
                 Message.reply(`Success! ${count} client(s) declared to be unverified.`);
@@ -25,7 +25,7 @@ module.exports = (Client, Message, value = '') => {
                 Message.reply('Botify failed.');
                 log('Execution failed.', e);
               });
-        })
+        });
     }
   } catch (e) {
     log(e);

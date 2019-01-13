@@ -77,7 +77,7 @@ const adjustRoleOfMembers = (doAddRole, Role, GuildMembers, reason = '') => {
     if (membersArray[i]) {
       addRoleToMember(membersArray[i]);
     } else {
-      reject(0);
+      resolve(0);
     }
   });
 }
@@ -95,8 +95,32 @@ const getVerificationRoleOfGuild = (Guild) => {
   }
 };
 
+/**
+ * Returns all members of the guild who have or 
+ * do not have some certain Role.
+ * @param {Guild} Guild - Discord.js Guild object.
+ * @param {boolean} hasRole - Must have the role.
+ * @param {Role} Role - Discord.js Role object.
+ */
+const getGuildMembersWithOrWithoutRole = (Guild, hasRole = true, Role) => {
+  return new Promise((resolve, reject) => {
+    Guild
+      .fetchMembers()
+      .then((GuildWithMembers) => {
+        resolve(
+          hasRole
+            ? GuildWithMembers.members
+              .filter(m => m.roles.find(r => r.id === Role.id))
+            : GuildWithMembers.members
+              .filter(m => m.roles.find(r => r.id === Role.id) === null)
+        );
+      });
+  });
+};
+
 module.exports = {
   kickGuildMember,
   adjustRoleOfMembers,
   getVerificationRoleOfGuild,
+  getGuildMembersWithOrWithoutRole,
 };

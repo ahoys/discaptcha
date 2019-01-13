@@ -6,17 +6,17 @@ const log = require('debug')('command.humanize');
  */
 module.exports = (Client, Message, value = '') => {
   try {
-    const verifiedRole = guildUtil.getVerificationRoleOfGuild(Message.guild);
-    if (verifiedRole) {
-      Message.guild
-        .fetchMembers()
-        .then((Guild) => {
+    const Role = guildUtil.getVerificationRoleOfGuild(Message.guild);
+    if (Role) {
+      guildUtil
+        .getGuildMembersWithOrWithoutRole(Message.guild, false, Role)
+        .then((GuildMembers) => {
           guildUtil
             .adjustRoleOfMembers(
               true,
-              verifiedRole,
-              Guild.members,
-              `Humanize triggered by ${Message.author.username}`,
+              Role,
+              GuildMembers,
+              `Humanize triggered by ${Message.author.username}.`
             )
               .then((count) => {
                 Message.reply(`Success! ${count} client(s) declared human!`);
