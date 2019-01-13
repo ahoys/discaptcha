@@ -1,4 +1,5 @@
 const config = require('../../configs/config.json');
+const guildUtil = require('./util.guild');
 const log = require('debug')('util.verify');
 
 const oops = 'Oops, there was a mistake. ' +
@@ -117,17 +118,7 @@ module.exports = {
                             'was a mistake.'
                           )
                           .then(() => {
-                            if (kick && GuildMember.kickable) {
-                              GuildMember
-                                .kick('Failed verification!')
-                                .then(() => {
-                                  log(`Kicked ${GuildMember.user.username}.`);
-                                })
-                                .catch((e) => {
-                                  log(`Could not kick ${GuildMember.user.username}.`);
-                                  log(e);
-                                });
-                            }
+                            guildUtil.kickGuildMember(GuildMember, 'Failed verification!');
                           });
                       }
                     });

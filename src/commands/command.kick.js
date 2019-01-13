@@ -1,5 +1,5 @@
 const log = require('debug')('command.kick');
-const auth = require('../../configs/auth.json');
+const guildUtil = require('../utilities/util.guild');
 const config = require('../../configs/config.json');
 
 /**
@@ -20,19 +20,14 @@ module.exports = (Client, Message, value = '') => {
         const missing = Guild.members
           .filter(m => m.roles.find(r => r.id === requestedRole.id) === null);
         if (missing && missing.size) {
-          let i = 0;
           missing.forEach((GuildMember) => {
-            if (
-              GuildMember.kickable &&
-              GuildMember.id !== Client.id &&
-              GuildMember.id !== auth.owner
-            ) {
-              const User = Message.author;
-              GuildMember.kick(`Kick command triggered by ${User.username}.`);
-              i += 1;
-            }
+            guildUtil
+              .kickGuildMember(
+                GuildMember,
+                `Kicking unverified clients. Triggered by ${User.username}.`
+              );
           });
-          Message.reply(`Kicked ${i} unverified client(s).`);
+          Message.reply('Kicking unverified client(s)...');
         }
       }
     }
