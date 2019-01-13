@@ -127,4 +127,14 @@ module.exports = {
     mustVerify: false,
     verifyMessage: '',
   },
+  verified: {
+    execute: require('./command.verified'),
+    description: 'Lists all clients who are verified.',
+    permissions: {
+      owner: true,
+      moderator: true,
+    },
+    mustVerify: false,
+    verifyMessage: '',
+  },
 }
