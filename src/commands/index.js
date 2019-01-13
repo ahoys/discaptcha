@@ -45,16 +45,17 @@ module.exports = {
     mustVerify: true,
     verifyMessage: 'Are you sure? This can give unwanted permissions to bots.',
   },
-  kick: {
-    execute: require('./command.kick'),
-    description: 'Kicks everyone who do not have the verification role set.',
-    permissions: {
-      owner: true,
-      moderator: true,
-    },
-    mustVerify: true,
-    verifyMessage: 'Are you sure? This will kick unverified human clients too.',
-  },
+  // TODO: requires a robust solution to kick everyone. See utilities/util.guild.
+  // kick: {
+  //   execute: require('./command.kick'),
+  //   description: 'Kicks everyone who do not have the verification role set.',
+  //   permissions: {
+  //     owner: true,
+  //     moderator: true,
+  //   },
+  //   mustVerify: true,
+  //   verifyMessage: 'Are you sure? This will kick unverified human clients too.',
+  // },
   leave: {
     execute: require('./command.leave'),
     description: 'Makes the bot leave the server.',
