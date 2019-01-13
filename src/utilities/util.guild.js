@@ -35,7 +35,7 @@ const kickGuildMember = (GuildMember, reason = 'Unspecified reason.') => {
 }
 
 /**
- * Adds a role to a collection of members.
+ * Either adds or removes roles from GuildMembers.
  * @param {boolean} doAddRole - Whether to add or remove the Role.
  * @param {*} Role 
  * @param {*} GuildMembers 
