@@ -14,6 +14,16 @@ const GuildMemberThatResolves = {
     });
   },
   user: User,
+  addRole: () => {
+    return new Promise((resolve) => {
+      resolve();
+    });
+  },
+  removeRole: () => {
+    return new Promise((resolve) => {
+      resolve();
+    });
+  },
 };
 
 const GuildMemberThatRejects = {
@@ -25,6 +35,16 @@ const GuildMemberThatRejects = {
     });
   },
   user: User,
+  addRole: () => {
+    return new Promise((resolve, reject) => {
+      reject();
+    });
+  },
+  removeRole: () => {
+    return new Promise((resolve, reject) => {
+      reject();
+    });
+  },
 };
 
 const reason = 'Just Testing.';
@@ -45,5 +65,45 @@ test('We catch an exception on kick rejection.', () => {
     .kickGuildMember(GuildMemberThatRejects, reason)
     .catch((e) => {
       expect(e).toBe('error');
+    });
+});
+
+test('Add a role to members, return success count.', () => {
+  expect.assertions(1);
+  return guildUtil
+    .adjustRoleOfMembers(
+      true,
+      {},
+      {
+        "0": GuildMemberThatResolves,
+        "1": GuildMemberThatResolves,
+        array: () => {
+          return [GuildMemberThatResolves, GuildMemberThatResolves];
+        },
+      },
+      reason
+    )
+    .then((resolve) => {
+      expect(resolve).toBe(2);
+    });
+});
+
+test('Remove a role from members, return success count.', () => {
+  expect.assertions(1);
+  return guildUtil
+    .adjustRoleOfMembers(
+      false,
+      {},
+      {
+        "0": GuildMemberThatResolves,
+        "1": GuildMemberThatResolves,
+        array: () => {
+          return [GuildMemberThatResolves, GuildMemberThatResolves];
+        },
+      },
+      reason
+    )
+    .then((resolve) => {
+      expect(resolve).toBe(2);
     });
 });
