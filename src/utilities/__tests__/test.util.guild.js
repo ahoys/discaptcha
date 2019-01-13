@@ -107,3 +107,15 @@ test('Remove a role from members, return success count.', () => {
       expect(resolve).toBe(2);
     });
 });
+
+test('Return a valid verification role for a guild.', () => {
+  const Guild = {
+    id: 'test',
+    roles: [
+      {
+        id: '1234',
+      }
+    ]
+  }
+  expect(guildUtil.getVerificationRoleOfGuild(Guild)).toEqual({"id": "1234"});
+});

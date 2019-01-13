@@ -2,6 +2,11 @@
   "clientOptions": {},
   "timeToVerifyInMs": 60000,
   "guilds": {
+    "test": {
+      "description": "Used for Jest testing",
+      "verificationRoleId": "1234",
+      "moderatorRoleId": "4321"
+    },
     "277194040401854464": {
       "description": "Tunneler",
       "verificationRoleId": "533366845496098830",

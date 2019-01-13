@@ -1,3 +1,4 @@
+const config = require('../../configs/config.json');
 const log = require('debug')('util.guild');
 
 /**
@@ -50,7 +51,7 @@ const adjustRoleOfMembers = (doAddRole, Role, GuildMembers, reason = '') => {
       if (doAddRole) {
         // Adding a role...
         GuildMember
-          .addRole((Role, reason))
+          .addRole(Role, reason)
           .then(() => {
             i += 1;
             if (i >= length) {
@@ -62,7 +63,7 @@ const adjustRoleOfMembers = (doAddRole, Role, GuildMembers, reason = '') => {
       } else {
         // Removing a role...
         GuildMember
-          .removeRole((Role, reason))
+          .removeRole(Role, reason)
           .then(() => {
             i += 1;
             if (i >= length) {
@@ -81,7 +82,21 @@ const adjustRoleOfMembers = (doAddRole, Role, GuildMembers, reason = '') => {
   });
 }
 
+/**
+ * Returns the verification role for the guild.
+ * @param {Guild} Guild - Discord.js Guild object.
+ */
+const getVerificationRoleOfGuild = (Guild) => {
+  try {
+    const verifiedRoleId = config.guilds[Guild.id].verificationRoleId;
+    return Guild.roles.find(r => String(r.id) === String(verifiedRoleId));
+  } catch (e) {
+    log('Failed getVerificationRoleOfGuild.', e);
+  }
+};
+
 module.exports = {
   kickGuildMember,
   adjustRoleOfMembers,
+  getVerificationRoleOfGuild,
 };
