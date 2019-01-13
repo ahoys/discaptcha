@@ -3,7 +3,7 @@ const log = require('debug')('command.leave');
 /**
  * Makes the bot leave the server.
  */
-module.exports = (Client, Message) => {
+module.exports = (Client, Message, value = '') => {
   try {
     if (
       Message &&

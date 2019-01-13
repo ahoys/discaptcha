@@ -3,7 +3,7 @@ const log = require('debug')('command.roles');
 /**
  * Prints a list of available guild roles.
  */
-module.exports = (Client, Message) => {
+module.exports = (Client, Message, value = '') => {
   try {
     const { guild } = Message;
     const { roles } = guild;

@@ -4,7 +4,7 @@ const config = require('../../configs/config.json');
 /**
  * Removes the verification role from everyone.
  */
-module.exports = (Client, Message) => {
+module.exports = (Client, Message, value = '') => {
   try {
     if (
       Message &&

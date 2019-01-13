@@ -4,7 +4,7 @@ const config = require('../../configs/config.json');
 /**
  * Prints moderator role information.
  */
-module.exports = (Client, Message) => {
+module.exports = (Client, Message, value = '') => {
   try {
     if (
       Message &&

@@ -3,7 +3,7 @@ const log = require('debug')('command.exit');
 /**
  * Exists Discord and closes the bot.
  */
-module.exports = (Client, Message) => {
+module.exports = (Client, Message, value = '') => {
   try {
     Message
       .reply('Goodbye 😿!')

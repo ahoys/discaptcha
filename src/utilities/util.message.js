@@ -11,7 +11,7 @@ module.exports = {
     return {
       mention: splits[0],
       command: splits[1],
-      value: splits[2]
+      value: String(splits[2])
     }
   },
   /**

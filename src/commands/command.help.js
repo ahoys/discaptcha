@@ -5,7 +5,7 @@ const config = require('../../package.json');
 /**
  * Prints out all the available commands.
  */
-module.exports = (Client, Message) => {
+module.exports = (Client, Message, value = '') => {
   try {
     // We don't want to display bot owner commands.
     let msg = `\n${config.description}\nAuthor: ${config.author}\nVersion: ${config.version}\n`;

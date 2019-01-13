@@ -5,7 +5,7 @@ const config = require('../../configs/config.json');
 /**
  * Kicks unverified clients.
  */
-module.exports = (Client, Message) => {
+module.exports = (Client, Message, value = '') => {
   try {
     if (
       Message &&

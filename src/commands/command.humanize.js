@@ -4,7 +4,7 @@ const config = require('../../configs/config.json');
 /**
  * Marks everyone human by giving them the verification role.
  */
-module.exports = (Client, Message) => {
+module.exports = (Client, Message, value = '') => {
   try {
     const { guild } = Message;
     const { id, roles, members } = guild;

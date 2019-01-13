@@ -96,11 +96,11 @@ Client.on('ready', () => {
         log(`${Message.author.username} triggered ${c.command}.`);
         if (command.mustVerify) {
           // This command requires verifying.
-          const cmd = () => command.execute(Client, Message);
+          const cmd = () => command.execute(Client, Message, c.value);
           verifyUtil.verifyCommand(Message, command.verifyMessage, cmd);
         } else {
           // This command does not require verifying.
-          command.execute(Client, Message);
+          command.execute(Client, Message, c.value);
         }
       }
     }

@@ -4,7 +4,7 @@ const config = require('../../configs/config.json');
 /**
  * Lists all clients that do not have the verification role.
  */
-module.exports = (Client, Message) => {
+module.exports = (Client, Message, value = '') => {
   try {
     const { guild } = Message;
     const { guilds } = config;
