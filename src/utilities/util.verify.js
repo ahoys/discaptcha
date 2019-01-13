@@ -110,15 +110,25 @@ module.exports = {
                           DMChannel.send(oops);
                         }
                       } else {
-                        DMChannel.send(
-                          'I\'m sorry but the verification has failed. ' +
-                          'Feel free to join the server again, if you think there ' +
-                          'was a mistake.'
-                        );
-                        if (kick && GuildMember.kickable) {
-                          log(`Kicked ${GuildMember.user.username}.`);
-                          GuildMember.kick('Failed verification!');
-                        }
+                        DMChannel
+                          .send(
+                            'I\'m sorry but the verification has failed. ' +
+                            'Feel free to join the server again, if you think there ' +
+                            'was a mistake.'
+                          )
+                          .then(() => {
+                            if (kick && GuildMember.kickable) {
+                              GuildMember
+                                .kick('Failed verification!')
+                                .then(() => {
+                                  log(`Kicked ${GuildMember.user.username}.`);
+                                })
+                                .catch((e) => {
+                                  log(`Could not kick ${GuildMember.user.username}.`);
+                                  log(e);
+                                });
+                            }
+                          });
                       }
                     });
                   });
