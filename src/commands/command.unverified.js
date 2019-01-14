@@ -10,11 +10,13 @@ module.exports = (Client, Message, value = '') => {
     if (Role) {
       guildUtil
         .getGuildMembersWithOrWithoutRole(Message.guild, false, Role)
-        .then((GuildMembers) => {
+        .then(GuildMembers => {
           const size = GuildMembers.size;
-          Message.reply(`There are ${size} client(s) without the ${Role.name} -role.`);
+          Message.reply(
+            `There are ${size} client(s) without the ${Role.name} -role.`
+          );
         })
-        .catch((e) => {
+        .catch(e => {
           log(e);
           Message.reply('execution failed.');
         });

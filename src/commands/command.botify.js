@@ -10,7 +10,7 @@ module.exports = (Client, Message, value = '') => {
     if (Role) {
       guildUtil
         .getGuildMembersWithOrWithoutRole(Message.guild, true, Role)
-        .then((GuildMembers) => {
+        .then(GuildMembers => {
           guildUtil
             .adjustRoleOfMembers(
               false,
@@ -18,13 +18,15 @@ module.exports = (Client, Message, value = '') => {
               GuildMembers,
               `Botify triggered by ${Message.author.username}.`
             )
-              .then((count) => {
-                Message.reply(`Success! ${count} client(s) declared to be unverified.`);
-              })
-              .catch((e) => {
-                Message.reply('Botify failed.');
-                log('Execution failed.', e);
-              });
+            .then(count => {
+              Message.reply(
+                `Success! ${count} client(s) declared to be unverified.`
+              );
+            })
+            .catch(e => {
+              Message.reply('Botify failed.');
+              log('Execution failed.', e);
+            });
         });
     }
   } catch (e) {

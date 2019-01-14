@@ -4,15 +4,15 @@ const Message = {
   content: '@tester moderator 100',
   guild: {
     owner: {
-      id: '1000'
-    }
+      id: '1000',
+    },
   },
   member: {
-    roles: [{ id: '100' }, { id: 'some_other'}]
+    roles: [{ id: '100' }, { id: 'some_other' }],
   },
   author: {
-    id: '1'
-  }
+    id: '1',
+  },
 };
 
 test('readCommand exists.', () => {

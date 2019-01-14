@@ -14,16 +14,18 @@ module.exports = (Client, Message, value = '') => {
       Message.guild.members
     ) {
       const Guild = Message.guild;
-      const moderatorRole = Guild.roles
-        .find(r => String(r.id) === String(config.guilds[Guild.id].moderatorRoleId));
+      const moderatorRole = Guild.roles.find(
+        r => String(r.id) === String(config.guilds[Guild.id].moderatorRoleId)
+      );
       if (moderatorRole) {
-        const moderators = Message.guild.members
-          .filter(m => m.roles.find(r => r.id === moderatorRole.id) !== null);
+        const moderators = Message.guild.members.filter(
+          m => m.roles.find(r => r.id === moderatorRole.id) !== null
+        );
         if (moderators && moderators.size) {
           Message.reply(
             'The current moderator role is ' +
-            `"${moderatorRole.name}", id: ${moderatorRole.id}.\n\n` +
-            `There are ${moderators.size} moderators.`
+              `"${moderatorRole.name}", id: ${moderatorRole.id}.\n\n` +
+              `There are ${moderators.size} moderators.`
           );
         } else {
           Message.reply('No moderators set.');

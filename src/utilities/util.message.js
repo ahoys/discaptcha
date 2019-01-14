@@ -6,13 +6,13 @@ module.exports = {
    * This simplifies reading commands from messages.
    * @returns {object}
    */
-  readCommand: (Message) => {
+  readCommand: Message => {
     const splits = Message.content.split(' ', 3);
     return {
       mention: splits[0],
       command: splits[1],
-      value: String(splits[2])
-    }
+      value: String(splits[2]),
+    };
   },
   /**
    * Returns true if the Message author has access to the

@@ -1,9 +1,15 @@
 const commands = require('../index');
 const keys = Object.keys(commands);
 
-keys.forEach((key) => {
+keys.forEach(key => {
   const command = commands[key];
-  const { execute, description, permissions, mustVerify, verifyMessage } = command;
+  const {
+    execute,
+    description,
+    permissions,
+    mustVerify,
+    verifyMessage,
+  } = command;
   // All commands must have an execution handle.
   test(`${key} has execution handle.`, () => {
     expect(typeof execute).toBe('function');

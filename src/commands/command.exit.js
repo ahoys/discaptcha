@@ -5,16 +5,12 @@ const log = require('debug')('command.exit');
  */
 module.exports = (Client, Message, value = '') => {
   try {
-    Message
-      .reply('Goodbye 😿!')
-      .then(() => {
-        Client
-          .destroy()
-          .then(() => {
-            log('Goodbye!');
-            process.exit(0);
-          });
+    Message.reply('Goodbye 😿!').then(() => {
+      Client.destroy().then(() => {
+        log('Goodbye!');
+        process.exit(0);
       });
+    });
   } catch (e) {
     log(e);
   }

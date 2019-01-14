@@ -10,7 +10,7 @@ module.exports = (Client, Message, value = '') => {
     if (Role) {
       guildUtil
         .getGuildMembersWithOrWithoutRole(Message.guild, false, Role)
-        .then((GuildMembers) => {
+        .then(GuildMembers => {
           guildUtil
             .adjustRoleOfMembers(
               true,
@@ -18,13 +18,13 @@ module.exports = (Client, Message, value = '') => {
               GuildMembers,
               `Humanize triggered by ${Message.author.username}.`
             )
-              .then((count) => {
-                Message.reply(`Success! ${count} client(s) declared human!`);
-              })
-              .catch((e) => {
-                Message.reply('Humanize failed.');
-                log('Execution failed.', e);
-              });
+            .then(count => {
+              Message.reply(`Success! ${count} client(s) declared human!`);
+            })
+            .catch(e => {
+              Message.reply('Humanize failed.');
+              log('Execution failed.', e);
+            });
         });
     }
   } catch (e) {

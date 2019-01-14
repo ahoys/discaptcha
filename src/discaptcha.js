@@ -21,11 +21,15 @@ if (fs.existsSync(configPath)) {
     typeof config.timeToVerifyInMs !== 'number' ||
     typeof config.guilds !== 'object'
   ) {
-    log(`${configPath} is not correctly constructed. See readme for steps to properly create the config.json.`);
+    log(
+      `${configPath} is not correctly constructed. See readme for steps to properly create the config.json.`
+    );
     hasErrors = true;
   }
 } else {
-  log(`${configPath} not found. The file is necessary for initializing the bot.`);
+  log(
+    `${configPath} not found. The file is necessary for initializing the bot.`
+  );
   hasErrors = true;
 }
 
@@ -38,11 +42,15 @@ if (fs.existsSync(authPath)) {
     typeof auth.id !== 'string' ||
     typeof auth.owner !== 'string'
   ) {
-    log(`${authPath} is not correctly constructed. See readme for steps to properly create the auth.json.`);
+    log(
+      `${authPath} is not correctly constructed. See readme for steps to properly create the auth.json.`
+    );
     hasErrors = true;
   }
 } else {
-  log(`${authPath} not found. The file is necessary for connecting the bot. See readme for more info.`);
+  log(
+    `${authPath} not found. The file is necessary for connecting the bot. See readme for more info.`
+  );
   hasErrors = true;
 }
 
@@ -61,24 +69,27 @@ const Discord = require('discord.js');
 
 // Login to Discord.
 const Client = new Discord.Client(config.clientOptions);
-Client.login(auth.token)
-  .catch((e) => {
-    log('Failed to connect.', e);
-  });
+Client.login(auth.token).catch(e => {
+  log('Failed to connect.', e);
+});
 
 /**
  * Emitted When the Client is ready for action.
  */
 Client.on('ready', () => {
   log('Successfully connected to Discord!');
-  log(`Username: ${Client.user.username}, id: ${Client.user.id}, verified: ${Client.user.verified}.`);
+  log(
+    `Username: ${Client.user.username}, id: ${Client.user.id}, verified: ${
+      Client.user.verified
+    }.`
+  );
   log('Waiting for events...');
 
   /**
    * on.message
    * Triggers every time the bot sees a new message.
    */
-  Client.on('message', (Message) => {
+  Client.on('message', Message => {
     if (
       // Make sure the bot is mentioned.
       Message.isMentioned(Client.user.id)
@@ -90,7 +101,12 @@ Client.on('ready', () => {
         // Make sure the message contains a valid command.
         commandKeys.includes(c.command) &&
         // Make sure the client has the required permission.
-        messageUtil.hasPermission(Message, commands[c.command].permissions, config.moderators, auth.owner)
+        messageUtil.hasPermission(
+          Message,
+          commands[c.command].permissions,
+          config.moderators,
+          auth.owner
+        )
       ) {
         const command = commands[c.command];
         log(`${Message.author.username} triggered ${c.command}.`);
@@ -110,7 +126,7 @@ Client.on('ready', () => {
    * on.guildMemberAdd
    * Triggers every time a new client joins the server (guild).
    */
-  Client.on('guildMemberAdd', (GuildMember) => {
+  Client.on('guildMemberAdd', GuildMember => {
     verifyUtil.verifyClient(GuildMember);
   });
 });

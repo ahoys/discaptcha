@@ -8,7 +8,7 @@ module.exports = (Client, Message, value = '') => {
     const { guild } = Message;
     const { roles } = guild;
     let msg = '\n';
-    roles.forEach((role) => {
+    roles.forEach(role => {
       msg += `\`${role.name}\`: ${role.id}\n`;
     });
     msg = msg.replace(/\@/g, '');

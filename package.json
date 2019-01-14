@@ -6,7 +6,8 @@
   "license": "MIT",
   "scripts": {
     "start": "node src/discaptcha.js",
-    "test": "jest"
+    "test": "jest",
+    "lint": "eslint src/ --fix"
   },
   "dependencies": {
     "debug": "^4.1.1",

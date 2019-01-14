@@ -16,16 +16,16 @@ const kickGuildMember = (GuildMember, reason = 'Unspecified reason.') => {
       typeof reason === 'string'
     ) {
       const User = GuildMember.user;
-      GuildMember
-        .kick(reason)
+      GuildMember.kick(reason)
         .then(() => {
-          const msg = User && typeof User.username === 'string'
-          ? `Kicked ${User.username}: ${reason}`
-          : `Kicked a guild member: ${reason}`;
+          const msg =
+            User && typeof User.username === 'string'
+              ? `Kicked ${User.username}: ${reason}`
+              : `Kicked a guild member: ${reason}`;
           log(msg);
           resolve(msg);
         })
-        .catch((e) => {
+        .catch(e => {
           log('Could not kick a guild member:', e);
           reject(e);
         });
@@ -33,45 +33,41 @@ const kickGuildMember = (GuildMember, reason = 'Unspecified reason.') => {
       reject('There was something wrong with the payload.');
     }
   });
-}
+};
 
 /**
  * Either adds or removes roles from GuildMembers.
  * @param {boolean} doAddRole - Whether to add or remove the Role.
- * @param {*} Role 
- * @param {*} GuildMembers 
- * @param {*} reason 
+ * @param {*} Role
+ * @param {*} GuildMembers
+ * @param {*} reason
  */
 const adjustRoleOfMembers = (doAddRole, Role, GuildMembers, reason = '') => {
   return new Promise((resolve, reject) => {
     const membersArray = GuildMembers.array();
     const length = membersArray.length;
     let i = 0;
-    const addRoleToMember = (GuildMember) => {
+    const addRoleToMember = GuildMember => {
       if (doAddRole) {
         // Adding a role...
-        GuildMember
-          .addRole(Role, reason)
-          .then(() => {
-            i += 1;
-            if (i >= length) {
-              resolve(i);
-            } else {
-              addRoleToMember(membersArray[i]);
-            }
-          });
+        GuildMember.addRole(Role, reason).then(() => {
+          i += 1;
+          if (i >= length) {
+            resolve(i);
+          } else {
+            addRoleToMember(membersArray[i]);
+          }
+        });
       } else {
         // Removing a role...
-        GuildMember
-          .removeRole(Role, reason)
-          .then(() => {
-            i += 1;
-            if (i >= length) {
-              resolve(i);
-            } else {
-              addRoleToMember(membersArray[i]);
-            }
-          });
+        GuildMember.removeRole(Role, reason).then(() => {
+          i += 1;
+          if (i >= length) {
+            resolve(i);
+          } else {
+            addRoleToMember(membersArray[i]);
+          }
+        });
       }
     };
     if (membersArray[i]) {
@@ -80,13 +76,13 @@ const adjustRoleOfMembers = (doAddRole, Role, GuildMembers, reason = '') => {
       resolve(0);
     }
   });
-}
+};
 
 /**
  * Returns the verification role for the guild.
  * @param {Guild} Guild - Discord.js Guild object.
  */
-const getVerificationRoleOfGuild = (Guild) => {
+const getVerificationRoleOfGuild = Guild => {
   try {
     const verifiedRoleId = config.guilds[Guild.id].verificationRoleId;
     return Guild.roles.find(r => String(r.id) === String(verifiedRoleId));
@@ -96,7 +92,7 @@ const getVerificationRoleOfGuild = (Guild) => {
 };
 
 /**
- * Returns all members of the guild who have or 
+ * Returns all members of the guild who have or
  * do not have some certain Role.
  * @param {Guild} Guild - Discord.js Guild object.
  * @param {boolean} hasRole - Must have the role.
@@ -104,17 +100,17 @@ const getVerificationRoleOfGuild = (Guild) => {
  */
 const getGuildMembersWithOrWithoutRole = (Guild, hasRole = true, Role) => {
   return new Promise((resolve, reject) => {
-    Guild
-      .fetchMembers()
-      .then((GuildWithMembers) => {
-        resolve(
-          hasRole
-            ? GuildWithMembers.members
-              .filter(m => m.roles.find(r => r.id === Role.id))
-            : GuildWithMembers.members
-              .filter(m => m.roles.find(r => r.id === Role.id) === null)
-        );
-      });
+    Guild.fetchMembers().then(GuildWithMembers => {
+      resolve(
+        hasRole
+          ? GuildWithMembers.members.filter(m =>
+              m.roles.find(r => r.id === Role.id)
+            )
+          : GuildWithMembers.members.filter(
+              m => m.roles.find(r => r.id === Role.id) === null
+            )
+      );
+    });
   });
 };
 

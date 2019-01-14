@@ -9,18 +9,18 @@ const GuildMemberThatResolves = {
   id: '1234567890',
   kickable: true,
   kick: () => {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       resolve();
     });
   },
   user: User,
   addRole: () => {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       resolve();
     });
   },
   removeRole: () => {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       resolve();
     });
   },
@@ -48,24 +48,22 @@ const GuildMemberThatRejects = {
 };
 
 const reason = 'Just Testing.';
-const resolveStr = `Kicked ${User.username}: ${reason}`
+const resolveStr = `Kicked ${User.username}: ${reason}`;
 
 test('Return string when the kick is successful.', () => {
   expect.assertions(1);
   return guildUtil
     .kickGuildMember(GuildMemberThatResolves, reason)
-    .then((resolve) => {
+    .then(resolve => {
       expect(resolve).toBe(resolveStr);
     });
 });
 
 test('We catch an exception on kick rejection.', () => {
   expect.assertions(1);
-  return guildUtil
-    .kickGuildMember(GuildMemberThatRejects, reason)
-    .catch((e) => {
-      expect(e).toBe('error');
-    });
+  return guildUtil.kickGuildMember(GuildMemberThatRejects, reason).catch(e => {
+    expect(e).toBe('error');
+  });
 });
 
 test('Add a role to members, return success count.', () => {
@@ -75,15 +73,15 @@ test('Add a role to members, return success count.', () => {
       true,
       {},
       {
-        "0": GuildMemberThatResolves,
-        "1": GuildMemberThatResolves,
+        '0': GuildMemberThatResolves,
+        '1': GuildMemberThatResolves,
         array: () => {
           return [GuildMemberThatResolves, GuildMemberThatResolves];
         },
       },
       reason
     )
-    .then((resolve) => {
+    .then(resolve => {
       expect(resolve).toBe(2);
     });
 });
@@ -95,15 +93,15 @@ test('Remove a role from members, return success count.', () => {
       false,
       {},
       {
-        "0": GuildMemberThatResolves,
-        "1": GuildMemberThatResolves,
+        '0': GuildMemberThatResolves,
+        '1': GuildMemberThatResolves,
         array: () => {
           return [GuildMemberThatResolves, GuildMemberThatResolves];
         },
       },
       reason
     )
-    .then((resolve) => {
+    .then(resolve => {
       expect(resolve).toBe(2);
     });
 });
@@ -114,8 +112,8 @@ test('Return a valid verification role for a guild.', () => {
     roles: [
       {
         id: '1234',
-      }
-    ]
-  }
-  expect(guildUtil.getVerificationRoleOfGuild(Guild)).toEqual({"id": "1234"});
+      },
+    ],
+  };
+  expect(guildUtil.getVerificationRoleOfGuild(Guild)).toEqual({ id: '1234' });
 });
