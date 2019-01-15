@@ -81,6 +81,18 @@ module.exports = {
     mustVerify: false,
     verifyMessage: '',
   },
+  reboot: {
+    execute: require('./command.reboot'),
+    description: 'Reboots the bot.',
+    permissions: {
+      owner: false,
+      moderator: false,
+    },
+    mustVerify: true,
+    verifyMessage:
+      'Are you sure? If something goes wrong the bot cannot ' +
+      'recover on its own.',
+  },
   role: {
     execute: require('./command.role'),
     description:
