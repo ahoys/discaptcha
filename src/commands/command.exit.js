@@ -7,8 +7,7 @@ module.exports = (Client, Message, value = '') => {
   try {
     Message.reply('Goodbye 😿!').then(() => {
       Client.destroy().then(() => {
-        log('Goodbye!');
-        process.exit(0);
+        process.exit(2);
       });
     });
   } catch (e) {
