@@ -173,7 +173,7 @@ if (cluster.isMaster) {
    * Discord-connection.
    */
   Client.on('reconnecting', () => {
-    log('Lost connection. Attempting to reconnect...');
+    log('Attempting to reconnect...');
   });
 
   /**
