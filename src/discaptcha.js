@@ -52,10 +52,11 @@ if (cluster.isMaster) {
       } else {
         // Circle of death.
         // We have failed.
+        log('Circle of death detected. Cannot recover the application.');
       }
     } else if (flag === 2) {
-      // Controller exit.
-      log('Goodbye!');
+      // Controlled exit.
+      log('The process was ordered to shut down.');
     } else if (flag === 3) {
       // Controlled reboot.
       log('Rebooting in 5 seconds...');
@@ -63,16 +64,29 @@ if (cluster.isMaster) {
       rebootTimer = setTimeout(() => {
         cluster.fork();
       }, 5000);
-    } else {
-      // Unknown crash.
-      // We have failed, this should not happen.
-      log(
-        `The process has crashed and cannot recover.\n` +
-          `pid: ${worker.process.pid}\n` +
-          `code: ${code}\n` +
-          `signal: ${signal}`
-      );
     }
+  });
+
+  // Ctrl+c event.
+  process.on('SIGINT', () => {
+    log('Shutting down...');
+    // You must exit to switch the exit flag.
+    // Otherwise the app may end up into a restarting loop.
+    process.exit(0);
+  });
+
+  // Something unexpected.
+  // This shouldn't be happening.
+  process.on('uncaughtException', err => {
+    try {
+      // Attempt to log the event.
+      log('UncaughtException occurred.', err);
+    } catch (e) {
+      // Even logging failed, just print the event.
+      console.log('Logging failed!');
+      console.log(e);
+    }
+    process.exit(1);
   });
 } else {
   // Worker Thread
