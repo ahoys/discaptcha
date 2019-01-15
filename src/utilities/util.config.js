@@ -7,14 +7,18 @@ const fs = require('fs');
  * @param {object} configObj - Config-object.
  */
 const isValidConfigObject = configObj => {
-  return (
-    typeof configObj === 'object' &&
-    typeof configObj.clientOptions === 'object' &&
-    typeof configObj.timeToVerifyInMs === 'number' &&
-    typeof configObj.guilds === 'object' &&
-    configObj.timeToVerifyInMs > 0 &&
-    Object.keys(configObj.guilds).length > 0
-  );
+  try {
+    return (
+      typeof configObj === 'object' &&
+      typeof configObj.clientOptions === 'object' &&
+      typeof configObj.timeToVerifyInMs === 'number' &&
+      typeof configObj.guilds === 'object' &&
+      configObj.timeToVerifyInMs > 0 &&
+      Object.keys(configObj.guilds).length > 0
+    );
+  } catch (e) {
+    log(e);
+  }
 };
 
 /**
@@ -22,12 +26,16 @@ const isValidConfigObject = configObj => {
  * @param {string} dirPath - Path to a config-JSON file.
  */
 const getConfig = (dirPath = './configs/config.json') => {
-  const resolvedPath = path.resolve(dirPath);
-  if (fs.existsSync(resolvedPath)) {
-    const obj = JSON.parse(fs.readFileSync(resolvedPath, 'utf8'));
-    return isValidConfigObject(obj) ? obj : undefined;
+  try {
+    const resolvedPath = path.resolve(dirPath);
+    if (fs.existsSync(resolvedPath)) {
+      const obj = JSON.parse(fs.readFileSync(resolvedPath, 'utf8'));
+      return isValidConfigObject(obj) ? obj : undefined;
+    }
+    return undefined;
+  } catch (e) {
+    log(e);
   }
-  return undefined;
 };
 
 module.exports = { getConfig, isValidConfigObject };
