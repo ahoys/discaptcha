@@ -145,7 +145,7 @@ if (cluster.isMaster) {
    */
   Client.on('ready', () => {
     log(
-      'Successfully connected to Discord 👏.\n' +
+      'Successfully connected to Discord!\n' +
         `Username: ${Client.user.username}\n` +
         `Id: ${Client.user.id}\n` +
         `Verified: ${Client.user.verified}\n` +
