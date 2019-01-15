@@ -1,66 +1,28 @@
 const debug = require('debug');
-const path = require('path');
-const fs = require('fs');
 const log = debug('root');
+const authUtil = require('./utilities/util.auth');
+const configUtil = require('./utilities/util.config');
 
 // Enable debug everywhere.
 debug.enable('*');
 log('Starting Discaptcha...');
 
-let auth, config;
-let hasErrors = false;
-const configPath = path.resolve('./configs/config.json');
-const authPath = path.resolve('./configs/auth.json');
-
-// Read configs.
-if (fs.existsSync(configPath)) {
-  config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
-  if (
-    typeof config !== 'object' ||
-    typeof config.clientOptions !== 'object' ||
-    typeof config.timeToVerifyInMs !== 'number' ||
-    typeof config.guilds !== 'object'
-  ) {
-    log(
-      `${configPath} is not correctly constructed. See readme for steps to properly create the config.json.`
-    );
-    hasErrors = true;
-  }
-} else {
-  log(
-    `${configPath} not found. The file is necessary for initializing the bot.`
-  );
-  hasErrors = true;
-}
-
-// Read auth.
-if (fs.existsSync(authPath)) {
-  auth = JSON.parse(fs.readFileSync(authPath, 'utf8'));
-  if (
-    typeof auth !== 'object' ||
-    typeof auth.token !== 'string' ||
-    typeof auth.id !== 'string' ||
-    typeof auth.owner !== 'string'
-  ) {
-    log(
-      `${authPath} is not correctly constructed. See readme for steps to properly create the auth.json.`
-    );
-    hasErrors = true;
-  }
-} else {
-  log(
-    `${authPath} not found. The file is necessary for connecting the bot. See readme for more info.`
-  );
-  hasErrors = true;
-}
-
-// If the basic requirements fail, we cannot proceed.
-if (hasErrors) {
-  log('The bot cannot be started.');
+// Get and validate authentication.
+const auth = authUtil.getAuth();
+if (!auth) {
+  log('Invalid auth.');
   process.exit(1);
 }
 
-// Time to connect Discord!
+// Get and validate configs.
+const config = configUtil.getConfig();
+if (!config) {
+  log('Invalid config.');
+  process.exit(1);
+}
+
+// We are now ready to setup Discord.js and
+// connect Discord.
 const commands = require('./commands/index');
 const commandKeys = Object.keys(commands);
 const messageUtil = require('./utilities/util.message');
