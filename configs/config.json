@@ -1,6 +1,7 @@
 {
   "clientOptions": {},
   "timeToVerifyInMs": 60000,
+  "reconnectTime": 30000,
   "guilds": {
     "test": {
       "description": "Used for Jest testing",

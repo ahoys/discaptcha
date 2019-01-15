@@ -12,6 +12,7 @@ const isValidConfigObject = configObj => {
       typeof configObj === 'object' &&
       typeof configObj.clientOptions === 'object' &&
       typeof configObj.timeToVerifyInMs === 'number' &&
+      typeof configObj.reconnectTime === 'number' &&
       typeof configObj.guilds === 'object' &&
       configObj.timeToVerifyInMs > 0 &&
       Object.keys(configObj.guilds).length > 0

@@ -118,8 +118,25 @@ if (cluster.isMaster) {
   const verifyUtil = require('./utilities/util.verify');
   const Discord = require('discord.js');
   const Client = new Discord.Client(config.clientOptions);
-  const reconnectTime = 10000;
+  const reconnectTime = config.reconnectTime;
   let reconnectTimeout;
+
+  /**
+   * Log-in to Discord via Discord.js.
+   * If the connection fails, try to re-connect.
+   */
+  const logInDiscord = () => {
+    Client.login(auth.token).catch(() => {
+      log(
+        'Could not connect Discord.' +
+          ` Attempting to reconnect in ${reconnectTime / 1000} seconds...`
+      );
+      clearTimeout(reconnectTimeout);
+      reconnectTimeout = setTimeout(() => {
+        logInDiscord();
+      }, reconnectTime);
+    });
+  };
 
   /**
    * on.ready
@@ -182,29 +199,15 @@ if (cluster.isMaster) {
   });
 
   /**
-   * on.reconnecting
-   * Triggered when Discord.js tries to reconnect after lost of
-   * Discord-connection.
-   */
-  Client.on('reconnecting', () => {
-    log('Attempting to reconnect...');
-  });
-
-  /**
    * on.error
    * Emitted whenever the client's WebSocket encounters a connection error.
    */
   Client.on('error', () => {
-    log(
-      `Discord.js websocket encountered a connection error.
-        Attempting to reconnect in ${reconnectTime / 1000} seconds.`
-    );
-    clearTimeout(reconnectTimeout);
-    reconnectTimeout = setTimeout(() => {
-      Client.login(auth.token);
-    }, reconnectTime);
+    // This usually happens when the connection is lost.
+    // Only way to recover is to re-login asap.
+    logInDiscord();
   });
 
   // Here we go!
-  Client.login(auth.token);
+  logInDiscord();
 }
