@@ -36,8 +36,7 @@ module.exports = (Client, Message, value = '') => {
           } else {
             // Over ten verified.
             Message.reply(
-              `There are ${size} clients with the verified ` +
-                `"${Role.name}" -role.`
+              `There are ${size} clients with the "${Role.name}" -role.`
             );
           }
         })
