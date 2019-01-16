@@ -174,10 +174,10 @@ if (cluster.isMaster) {
           commands[c.command].permissions,
           config.moderators,
           auth.owner
-        )
+        ) &&
+        !messageUtil.isGuildSpamming(Message.guild, config.guildSpamLimit)
       ) {
         const command = commands[c.command];
-        log(`${Message.author.username} triggered ${c.command}.`);
         if (command.mustVerify) {
           // This command requires verifying.
           const cmd = () => command.execute(Client, Message, c.value);
