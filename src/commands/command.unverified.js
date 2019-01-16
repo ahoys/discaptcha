@@ -38,6 +38,11 @@ module.exports = (Client, Message, value = '') => {
           log(e);
           Message.reply('execution failed.');
         });
+    } else {
+      Message.reply(
+        'The verified role is not set. ',
+        `Use command \`role\` to set the role. See \`help\` for more info.`
+      );
     }
   } catch (e) {
     log(e);
