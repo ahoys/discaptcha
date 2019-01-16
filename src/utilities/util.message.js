@@ -1,25 +1,30 @@
 const log = require('debug')('util.message');
 
-module.exports = {
-  /**
-   * Maps a message into a commanding frame.
-   * This simplifies reading commands from messages.
-   * @returns {object}
-   */
-  readCommand: Message => {
+/**
+ * Maps a message into a commanding frame.
+ * This simplifies reading commands from messages.
+ * @returns {object}
+ */
+const readCommand = Message => {
+  try {
     const splits = Message.content.split(' ', 3);
     return {
       mention: splits[0],
       command: splits[1],
       value: String(splits[2]),
     };
-  },
-  /**
-   * Returns true if the Message author has access to the
-   * command he is requesting.
-   * @returns {boolean}
-   */
-  hasPermission: (Message, permissions, roleId, ownerId) => {
+  } catch (e) {
+    log(e);
+  }
+};
+
+/**
+ * Returns true if the Message author has access to the
+ * command he is requesting.
+ * @returns {boolean}
+ */
+const hasPermission = (Message, permissions, roleId, ownerId) => {
+  try {
     const { guild, member, author } = Message;
     // If is a guild owner.
     if (
@@ -42,5 +47,9 @@ module.exports = {
       return true;
     }
     return false;
-  },
+  } catch (e) {
+    log(e);
+  }
 };
+
+module.exports = { readCommand, hasPermission };
