@@ -63,9 +63,13 @@ const isGuildSpamming = (Guild, guildSpamLimit = 1000) => {
   try {
     const now = new Date().getTime();
     if (guildSpam.has(Guild.id)) {
-      if (now - guildSpam.get(Guild.id) < guildSpamLimit) {
+      const timeBetween = now - guildSpam.get(Guild.id);
+      if (timeBetween < guildSpamLimit) {
         // Spamming!
-        log(`Guild "${Guild.id}" is spamming.`);
+        log(
+          `Guild "${Guild.id}" is spamming. ` +
+            `Repeat interval: ${timeBetween}ms.`
+        );
         guildSpam = guildSpam.set(Guild.id, now);
         return true;
       } else {
