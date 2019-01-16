@@ -2,6 +2,7 @@
   "clientOptions": {},
   "timeToVerifyInMs": 60000,
   "reconnectTime": 30000,
+  "guildSpamLimit": 1000,
   "guilds": {
     "test": {
       "description": "Used for Jest testing",

@@ -1,4 +1,6 @@
+const { Map } = require('immutable');
 const log = require('debug')('util.message');
+let guildSpam = Map({});
 
 /**
  * Maps a message into a commanding frame.
@@ -52,4 +54,32 @@ const hasPermission = (Message, permissions, roleId, ownerId) => {
   }
 };
 
-module.exports = { readCommand, hasPermission };
+/**
+ * Returns true if the Guild is spamming.
+ * @param {*} Guild - Discord.js Guild.
+ * @param {number} guildSpamLimit - What's the limit for spam (ms)?
+ */
+const isGuildSpamming = (Guild, guildSpamLimit = 1000) => {
+  try {
+    const now = new Date().getTime();
+    if (guildSpam.has(Guild.id)) {
+      if (now - guildSpam.get(Guild.id) < guildSpamLimit) {
+        // Spamming!
+        log(`Guild "${Guild.id}" is spamming.`);
+        guildSpam = guildSpam.set(Guild.id, now);
+        return true;
+      } else {
+        guildSpam = guildSpam.set(Guild.id, now);
+        return false;
+      }
+    } else {
+      guildSpam = guildSpam.set(Guild.id, now);
+      return false;
+    }
+  } catch (e) {
+    log(e);
+    return false;
+  }
+};
+
+module.exports = { readCommand, hasPermission, isGuildSpamming };

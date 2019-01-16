@@ -61,3 +61,13 @@ test('hasPermission returns true on bot owner permission.', () => {
   expect(typeof result).toBe('boolean');
   expect(result).toBe(true);
 });
+
+test('isGuildSpamming and Guild is spamming.', () => {
+  messageUtil.isGuildSpamming({ id: '1' }, 1000);
+  expect(messageUtil.isGuildSpamming({ id: '1' }, 1000)).toBe(true);
+});
+
+test('isGuildSpamming and Guild is not spamming.', () => {
+  messageUtil.isGuildSpamming({ id: '2' }, 0);
+  expect(messageUtil.isGuildSpamming({ id: '2' }, 0)).toBe(false);
+});
