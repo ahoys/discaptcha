@@ -4,9 +4,8 @@
  * License: MIT
  */
 const cluster = require('cluster');
-const debug = require('debug');
-const log = debug('root');
-debug.enable('*');
+const { logscribe } = require('logscribe');
+const { print, logprint } = logscribe('General');
 
 /**
  * Discaptcha starts here.
@@ -29,7 +28,7 @@ if (cluster.isMaster) {
     const flag = code === undefined ? signal : code;
     if (flag === 1) {
       // Unexpected exit.
-      log(
+      logprint(
         `The process has crashed.\n` +
           `pid: ${worker.process.pid}\n` +
           `code: ${code}\n` +
@@ -40,7 +39,7 @@ if (cluster.isMaster) {
       if (len === 0 || crashStamps[len] - crashStamps[len - 1] > 10000) {
         // Over ten seconds has passed since the last crash, meaning that
         // the app probably isn't in a circle of death.
-        log('Rebooting in 1 seconds...');
+        logprint('Rebooting in 1 seconds...');
         clearTimeout(rebootTimer);
         rebootTimer = setTimeout(() => {
           cluster.fork();
@@ -52,14 +51,14 @@ if (cluster.isMaster) {
       } else {
         // Circle of death.
         // We have failed.
-        log('Circle of death detected. Cannot recover the application.');
+        logprint('Circle of death detected. Cannot recover the application.');
       }
     } else if (flag === 2) {
       // Controlled exit.
-      log('The process was ordered to shut down.');
+      logprint('The process was ordered to shut down.');
     } else if (flag === 3) {
       // Controlled reboot.
-      log('Rebooting in 5 seconds...');
+      logprint('Rebooting in 5 seconds...');
       clearTimeout(rebootTimer);
       rebootTimer = setTimeout(() => {
         cluster.fork();
@@ -69,7 +68,7 @@ if (cluster.isMaster) {
 
   // Ctrl+c event.
   process.on('SIGINT', () => {
-    log('Shutting down...');
+    print('Shutting down...');
     // You must exit to switch the exit flag.
     // Otherwise the app may end up into a restarting loop.
     process.exit(0);
@@ -80,7 +79,7 @@ if (cluster.isMaster) {
   process.on('uncaughtException', err => {
     try {
       // Attempt to log the event.
-      log('UncaughtException occurred.', err);
+      logprint('UncaughtException occurred.', err);
     } catch (e) {
       // Even logging failed, just print the event.
       console.log('Logging failed!');
@@ -92,13 +91,13 @@ if (cluster.isMaster) {
   // Worker Thread
   // The actual Discord bot is located here in the worker
   // thread.
-  log('Starting Discaptcha...');
+  print('Starting Discaptcha...');
 
   // Get and validate authentication.
   const authUtil = require('./utilities/util.auth');
   const auth = authUtil.getAuth();
   if (!auth) {
-    log('Invalid auth.');
+    logprint('Invalid auth.');
     process.exit(1);
   }
 
@@ -106,7 +105,7 @@ if (cluster.isMaster) {
   const configUtil = require('./utilities/util.config');
   const config = configUtil.getConfig();
   if (!config) {
-    log('Invalid config.');
+    logprint('Invalid config.');
     process.exit(1);
   }
 
@@ -127,7 +126,7 @@ if (cluster.isMaster) {
    */
   const logInDiscord = () => {
     Client.login(auth.token).catch(() => {
-      log(
+      print(
         'Could not connect Discord.' +
           ` Attempting to reconnect in ${reconnectTime / 1000} seconds...`
       );
@@ -144,7 +143,7 @@ if (cluster.isMaster) {
    * i.e. connected.
    */
   Client.on('ready', () => {
-    log(
+    print(
       'Successfully connected to Discord!\n' +
         `Username: ${Client.user.username}\n` +
         `Id: ${Client.user.id}\n` +
