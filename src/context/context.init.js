@@ -1,5 +1,4 @@
-const { logscribe } = require('logscribe');
-const { lp } = logscribe('context.init');
+const { lp } = require('logscribe').default('context.init');
 const { Map } = require('immutable');
 
 /**

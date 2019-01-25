@@ -4,8 +4,8 @@
  * License: MIT
  */
 const cluster = require('cluster');
-const { logscribe, setLogDirPath } = require('logscribe');
-const { p, lp } = logscribe('General');
+const { setLogDirPath } = require('logscribe');
+const { p, lp } = require('logscribe').default('General');
 
 // Set logs to root.
 setLogDirPath('./');

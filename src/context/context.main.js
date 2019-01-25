@@ -1,5 +1,4 @@
-const { logscribe } = require('logscribe');
-const { lp } = logscribe('context.main');
+const { lp } = require('logscribe').default('context.main');
 const init = require('./context.init');
 let state;
 

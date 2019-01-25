@@ -1,6 +1,5 @@
 const guildUtil = require('../utilities/util.guild');
-const { logscribe } = require('logscribe');
-const { lp } = logscribe('command.humanize', '\x1b[32m');
+const { lp } = require('logscribe').default('command.humanize', '\x1b[32m');
 
 /**
  * Marks everyone human by giving them the verification role.

@@ -1,5 +1,4 @@
-const { logscribe } = require('logscribe');
-const { lp } = logscribe('util.config', '\x1b[31m');
+const { lp } = require('logscribe').default('util.config', '\x1b[31m');
 const path = require('path');
 const fs = require('fs');
 

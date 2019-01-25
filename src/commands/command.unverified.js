@@ -1,6 +1,5 @@
 const guildUtil = require('../utilities/util.guild');
-const { logscribe } = require('logscribe');
-const { lp } = logscribe('command.unverified', '\x1b[32m');
+const { lp } = require('logscribe').default('command.unverified', '\x1b[32m');
 
 /**
  * Lists all clients that do not have the verification role.

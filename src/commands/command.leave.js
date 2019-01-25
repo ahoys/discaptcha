@@ -1,5 +1,4 @@
-const { logscribe } = require('logscribe');
-const { lp } = logscribe('command.leave', '\x1b[32m');
+const { lp } = require('logscribe').default('command.leave', '\x1b[32m');
 
 /**
  * Makes the bot leave the server.

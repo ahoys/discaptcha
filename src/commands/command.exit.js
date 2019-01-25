@@ -1,5 +1,4 @@
-const { logscribe } = require('logscribe');
-const { lp } = logscribe('command.exit', '\x1b[32m');
+const { lp } = require('logscribe').default('command.exit', '\x1b[32m');
 
 /**
  * Exists Discord and closes the bot.

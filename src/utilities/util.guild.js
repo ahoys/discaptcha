@@ -1,6 +1,5 @@
 const config = require('../../configs/config.json');
-const { logscribe } = require('logscribe');
-const { l, lp } = logscribe('util.guild', '\x1b[31m');
+const { l, lp } = require('logscribe').default('util.guild', '\x1b[31m');
 
 /**
  * Kicks a GuildMember.
