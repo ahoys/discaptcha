@@ -4,8 +4,11 @@
  * License: MIT
  */
 const cluster = require('cluster');
-const { logscribe } = require('logscribe');
+const { logscribe, setLogDirPath } = require('logscribe');
 const { p, lp } = logscribe('General');
+
+// Set logs to root.
+setLogDirPath('./');
 
 /**
  * Discaptcha starts here.
