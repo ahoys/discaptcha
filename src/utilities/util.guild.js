@@ -1,5 +1,6 @@
 const config = require('../../configs/config.json');
-const log = require('debug')('util.guild');
+const { logscribe } = require('logscribe');
+const { l, lp } = logscribe('util.guild');
 
 /**
  * Kicks a GuildMember.
@@ -22,11 +23,11 @@ const kickGuildMember = (GuildMember, reason = 'Unspecified reason.') => {
             User && typeof User.username === 'string'
               ? `Kicked ${User.username}: ${reason}`
               : `Kicked a guild member: ${reason}`;
-          log(msg);
+          l(msg);
           resolve(msg);
         })
         .catch(e => {
-          log('Could not kick a guild member:', e);
+          lp('Could not kick a guild member:', e);
           reject(e);
         });
     } else {
@@ -87,7 +88,7 @@ const getVerificationRoleOfGuild = Guild => {
     const verifiedRoleId = config.guilds[Guild.id].verificationRoleId;
     return Guild.roles.find(r => String(r.id) === String(verifiedRoleId));
   } catch (e) {
-    log('Failed getVerificationRoleOfGuild.', e);
+    lp('Failed getVerificationRoleOfGuild.', e);
   }
 };
 

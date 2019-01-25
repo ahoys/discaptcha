@@ -1,4 +1,5 @@
-const log = require('debug')('command.help');
+const { logscribe } = require('logscribe');
+const { lp } = logscribe('command.help');
 const auth = require('../../configs/auth.json');
 const config = require('../../package.json');
 
@@ -37,6 +38,6 @@ module.exports = (Client, Message, value = '') => {
     });
     Message.reply(msg);
   } catch (e) {
-    log(e);
+    lp(e);
   }
 };

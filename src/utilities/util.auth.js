@@ -1,3 +1,5 @@
+const { logscribe } = require('logscribe');
+const { lp } = logscribe('util.auth');
 const path = require('path');
 const fs = require('fs');
 
@@ -18,7 +20,7 @@ const isValidAuthObject = authObj => {
       authObj.owner.trim() !== ''
     );
   } catch (e) {
-    log(e);
+    lp(e);
   }
 };
 
@@ -35,7 +37,7 @@ const getAuth = (dirPath = './configs/auth.json') => {
     }
     return undefined;
   } catch (e) {
-    log(e);
+    lp(e);
   }
 };
 

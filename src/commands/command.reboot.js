@@ -1,4 +1,5 @@
-const log = require('debug')('command.reboot');
+const { logscribe } = require('logscribe');
+const { lp } = logscribe('command.reboot');
 
 /**
  * Reboots the bot.
@@ -11,6 +12,6 @@ module.exports = (Client, Message, value = '') => {
       });
     });
   } catch (e) {
-    log(e);
+    lp(e);
   }
 };

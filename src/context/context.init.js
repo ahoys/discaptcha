@@ -1,4 +1,5 @@
-const log = require('debug')('context.initial');
+const { logscribe } = require('logscribe');
+const { lp } = logscribe('context.init');
 const { Map } = require('immutable');
 
 /**
@@ -29,15 +30,15 @@ const getValidatedStores = stores => {
           typeof store.get('name') === 'string' &&
           store.get('name').trim() !== ''
         ) {
-          log(`Store "${store.get('name')}" is invalid and cannot be loaded.`);
+          lp(`Store "${store.get('name')}" is invalid and cannot be loaded.`);
         } else {
-          log('Could not load an unknown store.');
+          lp('Could not load an unknown store.');
         }
       }
     });
     return initialState;
   } catch (e) {
-    log(e);
+    lp(e);
   }
 };
 
@@ -53,7 +54,7 @@ const readStores = overrideStores => {
     }
     return getValidatedStores([require('./stores/store.guilds')]);
   } catch (e) {
-    log(e);
+    lp(e);
   }
 };
 

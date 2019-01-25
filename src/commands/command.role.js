@@ -1,5 +1,6 @@
 const guildUtil = require('../utilities/util.guild');
-const log = require('debug')('command.role');
+const { logscribe } = require('logscribe');
+const { lp } = logscribe('command.role');
 
 module.exports = (Client, Message, value = '') => {
   try {
@@ -15,6 +16,6 @@ module.exports = (Client, Message, value = '') => {
       );
     }
   } catch (e) {
-    log(e);
+    lp(e);
   }
 };

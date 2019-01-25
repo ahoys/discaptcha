@@ -1,4 +1,5 @@
-const log = require('debug')('command.roles');
+const { logscribe } = require('logscribe');
+const { lp } = logscribe('command.roles');
 
 /**
  * Prints a list of available guild roles.
@@ -14,6 +15,6 @@ module.exports = (Client, Message, value = '') => {
     msg = msg.replace(/\@/g, '');
     Message.reply(msg);
   } catch (e) {
-    log(e);
+    lp(e);
   }
 };

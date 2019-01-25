@@ -1,5 +1,6 @@
 const guildUtil = require('../utilities/util.guild');
-const log = require('debug')('command.unverified');
+const { logscribe } = require('logscribe');
+const { lp } = logscribe('command.unverified');
 
 /**
  * Lists all clients that do not have the verification role.
@@ -35,7 +36,7 @@ module.exports = (Client, Message, value = '') => {
           }
         })
         .catch(e => {
-          log(e);
+          lp(e);
           Message.reply('execution failed.');
         });
     } else {
@@ -45,6 +46,6 @@ module.exports = (Client, Message, value = '') => {
       );
     }
   } catch (e) {
-    log(e);
+    lp(e);
   }
 };

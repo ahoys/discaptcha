@@ -1,5 +1,6 @@
-const log = require('debug')('command.moderators');
 const config = require('../../configs/config.json');
+const { logscribe } = require('logscribe');
+const { lp } = logscribe('command.moderators');
 
 /**
  * Prints moderator role information.
@@ -35,6 +36,6 @@ module.exports = (Client, Message, value = '') => {
       }
     }
   } catch (e) {
-    log(e);
+    lp(e);
   }
 };

@@ -1,5 +1,6 @@
 const guildUtil = require('../utilities/util.guild');
-const log = require('debug')('command.humanize');
+const { logscribe } = require('logscribe');
+const { lp } = logscribe('command.humanize');
 
 /**
  * Marks everyone human by giving them the verification role.
@@ -23,11 +24,11 @@ module.exports = (Client, Message, value = '') => {
             })
             .catch(e => {
               Message.reply('Humanize failed.');
-              log('Execution failed.', e);
+              lp('Execution failed.', e);
             });
         });
     }
   } catch (e) {
-    log(e);
+    lp(e);
   }
 };

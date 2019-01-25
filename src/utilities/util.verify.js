@@ -1,6 +1,7 @@
 const config = require('../../configs/config.json');
 const guildUtil = require('./util.guild');
-const log = require('debug')('util.verify');
+const { logscribe } = require('logscribe');
+const { lp } = logscribe('util.verify');
 
 const oops =
   'Oops, there was a mistake. ' +
@@ -53,7 +54,7 @@ module.exports = {
         }
       })
       .catch(e => {
-        log('Error logged!', e);
+        lp('Error logged!', e);
       });
   },
 
@@ -97,11 +98,11 @@ module.exports = {
                         DMChannel.send('Thanks, human!');
                       });
                     } else {
-                      log('Invalid bot configuration! Role not found.');
+                      lp('Invalid bot configuration! Role not found.');
                       DMChannel.send(oops);
                     }
                   } else {
-                    log(
+                    lp(
                       'Invalid bot configuration! Verification role id not found!'
                     );
                     DMChannel.send(oops);
@@ -124,7 +125,7 @@ module.exports = {
         });
       }
     } catch (e) {
-      log(e);
+      lp(e);
     }
   },
 };

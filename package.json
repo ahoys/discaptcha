@@ -10,7 +10,6 @@
     "lint": "eslint src/ --fix"
   },
   "dependencies": {
-    "debug": "^4.1.1",
     "discord.js": "^11.4.2",
     "immutable": "^4.0.0-rc.12",
     "logscribe": "^2.0.1"

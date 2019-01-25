@@ -1,4 +1,5 @@
-const log = require('debug')('command.leave');
+const { logscribe } = require('logscribe');
+const { lp } = logscribe('command.leave');
 
 /**
  * Makes the bot leave the server.
@@ -21,12 +22,12 @@ module.exports = (Client, Message, value = '') => {
         ).then(() => {
           const Guild = Message.guild;
           Guild.leave().then(() => {
-            log(`User ${User.username} asked me to leave ${Guild.name}.`);
+            lp(`User ${User.username} asked me to leave ${Guild.name}.`);
           });
         });
       });
     }
   } catch (e) {
-    log(e);
+    lp(e);
   }
 };

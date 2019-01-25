@@ -1,5 +1,6 @@
 const { Map } = require('immutable');
-const log = require('debug')('util.message');
+const { logscribe } = require('logscribe');
+const { lp } = logscribe('util.message');
 let guildSpam = Map({});
 
 /**
@@ -16,7 +17,7 @@ const readCommand = Message => {
       value: String(splits[2]),
     };
   } catch (e) {
-    log(e);
+    lp(e);
   }
 };
 
@@ -50,7 +51,7 @@ const hasPermission = (Message, permissions, roleId, ownerId) => {
     }
     return false;
   } catch (e) {
-    log(e);
+    lp(e);
   }
 };
 
@@ -66,7 +67,7 @@ const isGuildSpamming = (Guild, guildSpamLimit = 1000) => {
       const timeBetween = now - guildSpam.get(Guild.id);
       if (timeBetween < guildSpamLimit) {
         // Spamming!
-        log(
+        lp(
           `Guild "${Guild.id}" is spamming. ` +
             `Repeat interval: ${timeBetween}ms.`
         );
@@ -81,7 +82,7 @@ const isGuildSpamming = (Guild, guildSpamLimit = 1000) => {
       return false;
     }
   } catch (e) {
-    log(e);
+    lp(e);
     return false;
   }
 };

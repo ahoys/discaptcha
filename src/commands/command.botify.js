@@ -1,5 +1,6 @@
 const guildUtil = require('../utilities/util.guild');
-const log = require('debug')('command.botify');
+const { logscribe } = require('logscribe');
+const { lp } = logscribe('command.botify');
 
 /**
  * Removes the verification role from everyone.
@@ -25,11 +26,11 @@ module.exports = (Client, Message, value = '') => {
             })
             .catch(e => {
               Message.reply('Botify failed.');
-              log('Execution failed.', e);
+              lp('Execution failed.', e);
             });
         });
     }
   } catch (e) {
-    log(e);
+    lp(e);
   }
 };

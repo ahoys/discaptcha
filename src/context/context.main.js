@@ -1,4 +1,5 @@
-const log = require('debug')('context.main');
+const { logscribe } = require('logscribe');
+const { lp } = logscribe('context.main');
 const init = require('./context.init');
 let state;
 
@@ -53,7 +54,7 @@ const getContext = overrideStores => {
       dispatch,
     };
   } catch (e) {
-    log(e);
+    lp(e);
   }
 };
 

@@ -1,3 +1,5 @@
+const { logscribe } = require('logscribe');
+const { lp } = logscribe('util.config');
 const path = require('path');
 const fs = require('fs');
 
@@ -18,7 +20,7 @@ const isValidConfigObject = configObj => {
       Object.keys(configObj.guilds).length > 0
     );
   } catch (e) {
-    log(e);
+    lp(e);
   }
 };
 
@@ -35,7 +37,7 @@ const getConfig = (dirPath = './configs/config.json') => {
     }
     return undefined;
   } catch (e) {
-    log(e);
+    lp(e);
   }
 };
 
