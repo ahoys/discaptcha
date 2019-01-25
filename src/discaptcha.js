@@ -58,10 +58,10 @@ if (cluster.isMaster) {
       }
     } else if (flag === 2) {
       // Controlled exit.
-      lp('The process was ordered to shut down.');
+      p('The process was ordered to shut down.');
     } else if (flag === 3) {
       // Controlled reboot.
-      lp('Rebooting in 5 seconds...');
+      p('Rebooting in 5 seconds...');
       clearTimeout(rebootTimer);
       rebootTimer = setTimeout(() => {
         cluster.fork();
@@ -85,8 +85,8 @@ if (cluster.isMaster) {
       lp('UncaughtException occurred.', err);
     } catch (e) {
       // Even logging failed, just print the event.
-      lp('Logging failed!');
-      lp(e);
+      console.log('Logging failed!');
+      console.log(e);
     }
     process.exit(1);
   });
