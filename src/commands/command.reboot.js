@@ -1,5 +1,5 @@
 const { logscribe } = require('logscribe');
-const { lp } = logscribe('command.reboot');
+const { lp } = logscribe('command.reboot', '\x1b[32m');
 
 /**
  * Reboots the bot.

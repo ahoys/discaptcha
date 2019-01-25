@@ -1,6 +1,6 @@
 const config = require('../../configs/config.json');
 const { logscribe } = require('logscribe');
-const { lp } = logscribe('command.moderators');
+const { lp } = logscribe('command.moderators', '\x1b[32m');
 
 /**
  * Prints moderator role information.

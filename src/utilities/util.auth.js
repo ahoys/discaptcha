@@ -1,5 +1,5 @@
 const { logscribe } = require('logscribe');
-const { lp } = logscribe('util.auth');
+const { lp } = logscribe('util.auth', '\x1b[31m');
 const path = require('path');
 const fs = require('fs');
 

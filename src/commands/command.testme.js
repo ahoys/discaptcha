@@ -1,6 +1,6 @@
 const { logscribe } = require('logscribe');
 const { lp } = logscribe('command.testme');
-const verifyUtil = require('../utilities/util.verify');
+const verifyUtil = require('../utilities/util.verify', '\x1b[32m');
 
 /**
  * Tests the verification.

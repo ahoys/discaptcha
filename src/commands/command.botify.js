@@ -1,6 +1,6 @@
 const guildUtil = require('../utilities/util.guild');
 const { logscribe } = require('logscribe');
-const { lp } = logscribe('command.botify');
+const { lp } = logscribe('command.botify', '\x1b[32m');
 
 /**
  * Removes the verification role from everyone.

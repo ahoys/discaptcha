@@ -1,6 +1,6 @@
 const guildUtil = require('../utilities/util.guild');
 const { logscribe } = require('logscribe');
-const { lp } = logscribe('command.role');
+const { lp } = logscribe('command.role', '\x1b[32m');
 
 module.exports = (Client, Message, value = '') => {
   try {

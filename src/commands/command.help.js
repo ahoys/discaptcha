@@ -1,5 +1,5 @@
 const { logscribe } = require('logscribe');
-const { lp } = logscribe('command.help');
+const { lp } = logscribe('command.help', '\x1b[32m');
 const auth = require('../../configs/auth.json');
 const config = require('../../package.json');
 

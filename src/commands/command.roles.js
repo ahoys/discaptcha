@@ -1,5 +1,5 @@
 const { logscribe } = require('logscribe');
-const { lp } = logscribe('command.roles');
+const { lp } = logscribe('command.roles', '\x1b[32m');
 
 /**
  * Prints a list of available guild roles.

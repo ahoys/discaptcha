@@ -1,6 +1,6 @@
 const guildUtil = require('../utilities/util.guild');
 const { logscribe } = require('logscribe');
-const { lp } = logscribe('command.verified');
+const { lp } = logscribe('command.verified', '\x1b[32m');
 
 /**
  * Lists all clients that have the verification role.

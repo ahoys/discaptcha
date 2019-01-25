@@ -1,6 +1,6 @@
 const { Map } = require('immutable');
 const { logscribe } = require('logscribe');
-const { lp } = logscribe('util.message');
+const { lp } = logscribe('util.message', '\x1b[31m');
 let guildSpam = Map({});
 
 /**
