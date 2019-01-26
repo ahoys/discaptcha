@@ -1,6 +1,6 @@
 {
   "name": "discaptcha",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "description": "Discaptcha barricades your Discord server against unwanted bots.",
   "author": "Raunhofer",
   "license": "MIT",
