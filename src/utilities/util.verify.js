@@ -1,6 +1,6 @@
 const config = require('../../configs/config.json');
 const guildUtil = require('./util.guild');
-const { lp } = require('logscribe').default('util.verify', '\x1b[31m');
+const { l, p } = require('logscribe').default('util.verify', '\x1b[31m');
 
 const oops =
   'Oops, there was a mistake. ' +
@@ -133,12 +133,15 @@ module.exports = {
                   }
                 } else {
                   DMChannel.send(getMessage(guild, 'failure')).then(() => {
-                    guildUtil.kickGuildMember(
-                      GuildMember,
-                      'Failed verification!'
-                    ).catch((e) => {
-                      lp(`User ${user.username} was not kickable.`);
-                    });
+                    if (kick) {
+                      guildUtil.kickGuildMember(
+                        GuildMember,
+                        'Failed verification!'
+                      ).catch((e) => {
+                        p(`User ${user.username} was not kickable.`);
+                        l(e);
+                      });
+                    }
                   });
                 }
               });
