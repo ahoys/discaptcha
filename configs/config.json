@@ -12,7 +12,8 @@
         "welcome": "Press 👌 emoji to verify that you are not a bot",
         "success": "Verified to be a human!",
         "failure": "Failed! Bad bot!"
-      }
+      },
+      "kickUnverified": true
     },
     "277194040401854464": {
       "description": "Tunneler",
@@ -22,7 +23,8 @@
         "welcome": "",
         "success": "",
         "failure": ""
-      }
+      },
+      "kickUnverified": true
     },
     "106724985292193792": {
       "description": "Kyllikki",
@@ -32,7 +34,8 @@
         "welcome": "",
         "success": "",
         "failure": ""
-      }
+      },
+      "kickUnverified": true
     },
     "107493413754003456": {
       "description": "Chivalry",
@@ -42,7 +45,8 @@
         "welcome": "",
         "success": "",
         "failure": ""
-      }
+      },
+      "kickUnverified": true
     }
   }
 }

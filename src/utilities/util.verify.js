@@ -133,7 +133,8 @@ module.exports = {
                   }
                 } else {
                   DMChannel.send(getMessage(guild, 'failure')).then(() => {
-                    if (kick) {
+                    const { guilds } = config;
+                    if (kick && guilds[guild.id].kickUnverified) {
                       guildUtil.kickGuildMember(
                         GuildMember,
                         'Failed verification!'
