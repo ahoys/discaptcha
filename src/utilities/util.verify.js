@@ -136,7 +136,9 @@ module.exports = {
                     guildUtil.kickGuildMember(
                       GuildMember,
                       'Failed verification!'
-                    );
+                    ).catch((e) => {
+                      lp(`User ${user.username} was not kickable.`);
+                    });
                   });
                 }
               });

@@ -30,7 +30,10 @@ const kickGuildMember = (GuildMember, reason = 'Unspecified reason.') => {
           reject(e);
         });
     } else {
-      reject('There was something wrong with the payload.');
+      reject(
+        'There was something wrong with the payload. ' +
+        'Maybe the target was not kickable?'
+      );
     }
   });
 };
