@@ -7,6 +7,35 @@ const oops =
   'This bot is not properly configured! ' +
   'Please contact the server admin.';
 
+/**
+ * Returns a suitable verification message that can
+ * also be a custom message.
+ */
+const getMessage = ({ id, name }, type) => {
+  try {
+    const { guilds } = config;
+    const defaults = {
+      welcome: `Hello and welcome to ${name}!\n\n` +
+        'Before you can participate, you must verify that you are not a bot.\n' +
+        'To verify, all you need to do is click the 👌 -emoji below.',
+      success: 'Thanks, human!',
+      failure: "I'm sorry but the verification has failed. " +
+        'Feel free to join the server again, if you think there ' +
+        'was a mistake.',
+    };
+    const strings = guilds[id] && guilds[id].strings
+      ? guilds[id].strings
+      : undefined;
+    return strings &&
+      typeof strings[type] === 'string' &&
+      strings[type][0]
+        ? strings[type]
+        : defaults[type];
+  } catch (e) {
+    lp(e);
+  }
+};
+
 module.exports = {
   /**
    * Gets a verification for a client command.
@@ -66,11 +95,7 @@ module.exports = {
       if (GuildMember) {
         const { user, guild } = GuildMember;
         user.createDM().then(DMChannel => {
-          DMChannel.send(
-            `Hello and welcome to ${guild.name}!\n\n` +
-              'Before you can participate, you must verify that you are not a bot.\n' +
-              'To verify, all you need to do is click the 👌 -emoji below.'
-          ).then(VerifyMessage => {
+          DMChannel.send(getMessage(guild, 'welcome')).then(VerifyMessage => {
             VerifyMessage.react('👌').then(() => {
               const filter = (r, u) =>
                 r.emoji.name === '👌' && u.id === user.id;
@@ -94,7 +119,7 @@ module.exports = {
                     );
                     if (role) {
                       GuildMember.addRole(role, 'Verified human.').then(() => {
-                        DMChannel.send('Thanks, human!');
+                        DMChannel.send(getMessage(guild, 'success'));
                       });
                     } else {
                       lp('Invalid bot configuration! Role not found.');
@@ -107,11 +132,7 @@ module.exports = {
                     DMChannel.send(oops);
                   }
                 } else {
-                  DMChannel.send(
-                    "I'm sorry but the verification has failed. " +
-                      'Feel free to join the server again, if you think there ' +
-                      'was a mistake.'
-                  ).then(() => {
+                  DMChannel.send(getMessage(guild, 'failure')).then(() => {
                     guildUtil.kickGuildMember(
                       GuildMember,
                       'Failed verification!'

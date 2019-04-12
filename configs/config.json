@@ -7,22 +7,42 @@
     "test": {
       "description": "Used for Jest testing",
       "verificationRoleId": "1234",
-      "moderatorRoleId": "4321"
+      "moderatorRoleId": "4321",
+      "strings": {
+        "welcome": "Press 👌 emoji to verify that you are not a bot",
+        "success": "Verified to be a human!",
+        "failure": "Failed! Bad bot!"
+      }
     },
     "277194040401854464": {
       "description": "Tunneler",
       "verificationRoleId": "533366845496098830",
-      "moderatorRoleId": "277503950536704000"
+      "moderatorRoleId": "277503950536704000",
+      "strings": {
+        "welcome": "",
+        "success": "",
+        "failure": ""
+      }
     },
     "106724985292193792": {
       "description": "Kyllikki",
       "verificationRoleId": "533366845496098830",
-      "moderatorRoleId": "106725431218044928"
+      "moderatorRoleId": "106725431218044928",
+      "strings": {
+        "welcome": "",
+        "success": "",
+        "failure": ""
+      }
     },
     "107493413754003456": {
       "description": "Chivalry",
       "verificationRoleId": "533683483772452865",
-      "moderatorRoleId": "533684032937000960"
+      "moderatorRoleId": "533684032937000960",
+      "strings": {
+        "welcome": "",
+        "success": "",
+        "failure": ""
+      }
     }
   }
 }
