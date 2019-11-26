@@ -10,15 +10,15 @@
     "lint": "eslint src/ --fix"
   },
   "dependencies": {
-    "discord.js": "^11.4.2",
+    "discord.js": "^11.5.1",
     "immutable": "^4.0.0-rc.12",
-    "logscribe": "^2.0.1"
+    "logscribe": "^2.0.2"
   },
   "devDependencies": {
-    "eslint": "^5.12.0",
-    "eslint-config-prettier": "^3.4.0",
-    "eslint-plugin-prettier": "^3.0.1",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^3.6.0",
+    "eslint-plugin-prettier": "^3.1.1",
     "jest": "^23.6.0",
-    "prettier": "^1.15.3"
+    "prettier": "^1.19.1"
   }
 }
