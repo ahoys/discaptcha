@@ -21,7 +21,8 @@ const getMessage = ({ id, name }, type) => {
       success: 'Thanks, human!',
       failure: "I'm sorry but the verification has failed. " +
         'Feel free to join the server again, if you think there ' +
-        'was a mistake.',
+        'was a mistake.\n\nDo note that if you can\'t see the reaction emoji, you ' +
+        'may have disabled them in your user settings!',
     };
     const strings = guilds[id] && guilds[id].strings
       ? guilds[id].strings
