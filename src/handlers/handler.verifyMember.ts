@@ -29,7 +29,9 @@ export const verifyMember = (guildMember: GuildMember): Promise<string> =>
               .react('👌')
               .then(() => {
                 const collector = message.createReactionCollector(
-                  (reaction) => reaction.emoji.name === '👌',
+                  (reaction) =>
+                    reaction.emoji.name === '👌' ||
+                    reaction.emoji.name === '💩',
                   {
                     time: 60000,
                   }
