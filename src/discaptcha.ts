@@ -1,10 +1,10 @@
 import DiscordJs, { Intents } from 'discord.js';
 import { config } from 'dotenv';
-import { p } from 'logscribe';
+import { lp, p } from 'logscribe';
 import { uninstall } from './commands/uninstall';
 import { humanize } from './commands/humanize';
 import { install } from './commands/install';
-import { test } from './commands/test';
+import { verifyMember } from './handlers/handler.verifyMember';
 
 config({ path: __dirname + '/.env' });
 const { APP_TOKEN, APP_ID, OWNER_ID } = process.env;
@@ -51,54 +51,63 @@ Client.on('ready', () => {
  * Messages are used to control the bot.
  */
 Client.on('message', (Message) => {
-  if (Client.user && Message.mentions.has(Client.user.id)) {
-    const { author, content, guild } = Message;
-    if (author.id === OWNER_ID) {
-      const supportedCommands = ['humanize', 'install', 'test', 'uninstall'];
-      const cSplit = content.split(' ');
-      const cmd = cSplit[1];
-      if (guild && cmd && supportedCommands.includes(cmd)) {
-        if (cmd === 'humanize') {
-          humanize(guild)
-            .then((msg) => {
-              Message.reply(msg);
-            })
-            .catch((msg) => {
-              Message.reply(msg);
-            });
-        } else if (cmd === 'install') {
-          install(guild)
-            .then((msg) => {
-              Message.reply(msg);
-            })
-            .catch((msg) => {
-              Message.reply(msg);
-            });
-        } else if (cmd === 'test') {
-          test(guild)
-            .then((msg) => {
-              Message.reply(msg);
-            })
-            .catch((msg) => {
-              Message.reply(msg);
-            });
-        } else if (cmd === 'uninstall') {
-          uninstall(guild)
-            .then((msg) => {
-              Message.reply(msg);
-            })
-            .catch((msg) => {
-              Message.reply(msg);
-            });
+  try {
+    if (Client.user && Message.mentions.has(Client.user.id)) {
+      const { author, content, guild, member } = Message;
+      const cmd = content.split(' ')[1];
+      if (typeof cmd === 'string' && guild && member) {
+        if (
+          author.id === OWNER_ID &&
+          ['humanize', 'install', 'uninstall'].includes(cmd)
+        ) {
+          // Commands that require owner-access.
+          if (cmd === 'humanize') {
+            humanize(guild)
+              .then((msg) => {
+                Message.reply(msg);
+              })
+              .catch((msg) => {
+                Message.reply(msg);
+              });
+          } else if (cmd === 'install') {
+            install(guild)
+              .then((msg) => {
+                Message.reply(msg);
+              })
+              .catch((msg) => {
+                Message.reply(msg);
+              });
+          } else if (cmd === 'uninstall') {
+            uninstall(guild)
+              .then((msg) => {
+                Message.reply(msg);
+              })
+              .catch((msg) => {
+                Message.reply(msg);
+              });
+          }
+        } else if (['verifyme'].includes(cmd)) {
+          // Commands that are free for all.
+          if (cmd === 'verifyme') {
+            verifyMember(member)
+              .then((msg) => {
+                p(msg);
+              })
+              .catch((msg) => {
+                p(msg);
+              });
+          }
+        } else {
+          Message.reply(
+            author.id === OWNER_ID
+              ? 'the available commands for you are: humanize, install, uninstall and verifyme.'
+              : 'the available commands for you are: verifyme.'
+          );
         }
-      } else {
-        Message.reply(
-          `supported commands are: ${supportedCommands.map((c, i) =>
-            i === 0 ? c : ` ${c}`
-          )}.`
-        );
       }
     }
+  } catch (err) {
+    lp(err);
   }
 });
 
@@ -108,7 +117,17 @@ Client.on('message', (Message) => {
  * verify member's "humanity".
  */
 Client.on('guildMemberAdd', (GuildMember) => {
-  console.log('New member');
+  try {
+    verifyMember(GuildMember)
+      .then((msg) => {
+        p(msg);
+      })
+      .catch((msg) => {
+        p(msg);
+      });
+  } catch (err) {
+    lp(err);
+  }
 });
 
 /**
@@ -116,7 +135,11 @@ Client.on('guildMemberAdd', (GuildMember) => {
  * Probably Internet related issues.
  */
 Client.on('error', () => {
-  login();
+  try {
+    login();
+  } catch (err) {
+    lp(err);
+  }
 });
 
 login();
