@@ -26,28 +26,28 @@ const createAndAssignVerified = (
       reason: 'Discaptcha install command executed.',
     })
     .then(() => {
-      // Make sure the @everyone-role does not allow speaking.
-      const everyoneRole = guild.roles.everyone;
-      const newPermissions = everyoneRole.permissions
-        .remove('SEND_MESSAGES')
-        .remove('SPEAK');
-      everyoneRole
-        .setPermissions(newPermissions)
+      // Humanize all already existing users.
+      humanize(guild)
         .then(() => {
-          // Humanize all already existing users.
-          humanize(guild)
+          // Make sure the @everyone-role does not allow speaking.
+          const everyoneRole = guild.roles.everyone;
+          const newPermissions = everyoneRole.permissions
+            .remove('SEND_MESSAGES')
+            .remove('SPEAK');
+          everyoneRole
+            .setPermissions(newPermissions)
             .then(() => {
               resolve(
                 'installation done. Discaptcha is ready to serve this guild.'
               );
             })
-            .catch((msg) => {
-              reject(msg);
+            .catch((err) => {
+              lp(err);
+              reject('was unable to set proper @everyone permissions.');
             });
         })
-        .catch((err) => {
-          lp(err);
-          reject('was unable to set proper @everyone permissions.');
+        .catch((msg) => {
+          reject(msg);
         });
     })
     .catch((err) => {
