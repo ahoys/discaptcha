@@ -8,13 +8,11 @@
     "lint": "./node_modules/.bin/tslint --project ./ --fix ./src/**"
   },
   "dependencies": {
-    "@types/nedb": "^1.8.11",
     "@types/node": "^14.14.14",
     "@types/ws": "^7.4.0",
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
     "logscribe": "^2.0.2",
-    "nedb": "^1.8.0",
     "prettier": "^2.2.1",
     "ts-loader": "^8.0.12",
     "tslint": "^6.1.3",
