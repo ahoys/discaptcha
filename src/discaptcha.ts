@@ -1,7 +1,7 @@
 import DiscordJs, { Intents } from 'discord.js';
 import { config } from 'dotenv';
 import { p } from 'logscribe';
-import { botify } from './commands/botify';
+import { uninstall } from './commands/uninstall';
 import { humanize } from './commands/humanize';
 import { install } from './commands/install';
 import { test } from './commands/test';
@@ -54,19 +54,11 @@ Client.on('message', (Message) => {
   if (Client.user && Message.mentions.has(Client.user.id)) {
     const { author, content, guild } = Message;
     if (author.id === OWNER_ID) {
-      const supportedCommands = ['botify', 'humanize', 'install', 'test'];
+      const supportedCommands = ['humanize', 'install', 'test', 'uninstall'];
       const cSplit = content.split(' ');
       const cmd = cSplit[1];
       if (guild && cmd && supportedCommands.includes(cmd)) {
-        if (cmd === 'botify') {
-          botify(guild)
-            .then((msg) => {
-              Message.reply(msg);
-            })
-            .catch((msg) => {
-              Message.reply(msg);
-            });
-        } else if (cmd === 'humanize') {
+        if (cmd === 'humanize') {
           humanize(guild)
             .then((msg) => {
               Message.reply(msg);
@@ -84,6 +76,14 @@ Client.on('message', (Message) => {
             });
         } else if (cmd === 'test') {
           test(guild)
+            .then((msg) => {
+              Message.reply(msg);
+            })
+            .catch((msg) => {
+              Message.reply(msg);
+            });
+        } else if (cmd === 'uninstall') {
+          uninstall(guild)
             .then((msg) => {
               Message.reply(msg);
             })

@@ -2,6 +2,8 @@ import { Guild } from 'discord.js';
 import { lp } from 'logscribe';
 import { humanize } from './humanize';
 
+const roleName = process.env.ROLE_NAME || 'verified';
+
 /**
  * Creates a new verified role and assigns it to everyone.
  * @param {Guild} guild Discord guild in question.
@@ -29,22 +31,28 @@ const createAndAssignVerified = (
       const newPermissions = everyoneRole.permissions
         .remove('SEND_MESSAGES')
         .remove('SPEAK');
-      everyoneRole.setPermissions(newPermissions).then(() => {
-        // Humanize all already existing users.
-        humanize(guild)
-          .then(() => {
-            resolve(
-              'installation done. Discaptcha is ready to serve this guild.'
-            );
-          })
-          .catch((msg) => {
-            reject(msg);
-          });
-      });
+      everyoneRole
+        .setPermissions(newPermissions)
+        .then(() => {
+          // Humanize all already existing users.
+          humanize(guild)
+            .then(() => {
+              resolve(
+                'installation done. Discaptcha is ready to serve this guild.'
+              );
+            })
+            .catch((msg) => {
+              reject(msg);
+            });
+        })
+        .catch((err) => {
+          lp(err);
+          reject('was unable to set proper @everyone permissions.');
+        });
     })
     .catch((err) => {
       lp(err);
-      reject('Failed to create the verified role.');
+      reject('failed to create the verified role.');
     });
 };
 
@@ -59,11 +67,11 @@ export const install = (guild: Guild): Promise<string> =>
       guild.roles
         .fetch()
         .then((roles) => {
-          const verifyRole = roles.cache.find((r) => r.name === 'verified');
+          const verifyRole = roles.cache.find((r) => r.name === roleName);
           if (verifyRole) {
             // Old role found.
             verifyRole
-              .delete()
+              .delete('Replacing the old role with a new one.')
               .then(() => {
                 createAndAssignVerified(guild, resolve, reject);
               })
@@ -78,7 +86,7 @@ export const install = (guild: Guild): Promise<string> =>
         })
         .catch((err) => {
           lp(err);
-          reject('failed to fetch existing roles.');
+          reject('failed to fetch the existing roles.');
         });
     } catch (err) {
       reject('failed to install.');

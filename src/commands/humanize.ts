@@ -1,6 +1,8 @@
 import { Guild } from 'discord.js';
 import { lp } from 'logscribe';
 
+const roleName = process.env.ROLE_NAME || 'verified';
+
 /**
  * Verifies all current users (including users in offline).
  * @param {Guild} guild Discord guild in question.
@@ -11,7 +13,7 @@ export const humanize = (guild: Guild): Promise<string> =>
       guild.roles
         .fetch()
         .then((roles) => {
-          const verifyRole = roles.cache.find((r) => r.name === 'verified');
+          const verifyRole = roles.cache.find((r) => r.name === roleName);
           if (verifyRole) {
             guild.members
               .fetch()
@@ -33,7 +35,7 @@ export const humanize = (guild: Guild): Promise<string> =>
         })
         .catch((err) => {
           lp(err);
-          reject('failed to fetch roles.');
+          reject('failed to fetch the roles.');
         });
     } catch (err) {
       lp(err);
