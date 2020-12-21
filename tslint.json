@@ -6,6 +6,7 @@
   ],
   "rules": {
     "no-console": false,
+    "no-submodule-imports": false,
     "prettier": [
       true,
       "./.prettierrc"

@@ -1,3 +1,5 @@
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
 import DiscordJs, { Intents } from 'discord.js';
 import { config } from 'dotenv';
 import { lp, p } from 'logscribe';
