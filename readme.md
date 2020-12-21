@@ -23,7 +23,7 @@ It takes about 5-15 mins to install the bot.
 7. Invite the bot to your server(s) with your web browser. Use the following url: https://discordapp.com/oauth2/authorize?&client_id=YOUR_APP_CLIENT_ID_HERE&scope=bot&permissions=0 (Replace YOUR_APP_CLIENT_ID_HERE with the application id of the bot (see step 2)).
 8. Use command `node discaptcha` to run the bot. It should now appear to your server(s).
 9. Create a new server role "bots" or similar and give it to the bot. The role should be on top of the other roles and have an "Administrator" permission enabled.
-10. In Discord, command the bot to install itself: `@Discaptcha install`. This must be done on all servers (guilds) where you want to use the bot.
+10. In Discord, command the bot to install itself: `@Discaptcha install`. This must be done on all servers (guilds) where you want to use the bot. Do note that the process may take quite a while on large servers as the bot will give the verified role to all users.
 
 That's all. Discaptcha is now functional. Type `@Discaptcha help` for a list of commands. You must always mention the bot to activate a command.
 
