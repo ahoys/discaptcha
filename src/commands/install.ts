@@ -71,9 +71,7 @@ export const install = (guild: Guild): Promise<string> =>
       guild.roles
         .fetch()
         .then((roles) => {
-          const verifyRole = roles.cache.find(
-            (r) => r.name.toLowerCase() === roleName.toLowerCase()
-          );
+          const verifyRole = roles.cache.find((r) => r.name === roleName);
           if (verifyRole) {
             // Old role found.
             verifyRole
