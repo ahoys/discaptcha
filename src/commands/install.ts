@@ -20,7 +20,7 @@ const createAndAssignVerified = (
   guild.roles
     .create({
       data: {
-        name: 'verified',
+        name: roleName,
         permissions: ['SEND_MESSAGES', 'SPEAK'],
       },
       reason: 'Discaptcha install command executed.',
