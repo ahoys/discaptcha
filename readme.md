@@ -19,11 +19,11 @@ It takes about 5-15 mins to install the bot.
 3. [Install Node.js if not already.](https://nodejs.org/en/)
 4. [Download the newest Discaptcha release](https://github.com/ahoys/discaptcha/releases) and extract it to somewhere.
 5. Run `npm install` in the extraction folder.
-6. Create a new file called `.env` inside the extraction folder and read the [configuration section](https://github.com/ahoys/discaptcha#Configuration) below.
+6. Open the `.env` inside the extraction folder (it may be hidden on some OSes) and read the [configuration section](https://github.com/ahoys/discaptcha#Configuration) below.
 7. Invite the bot to your server(s) with your web browser. Use the following url: https://discordapp.com/oauth2/authorize?&client_id=YOUR_APP_CLIENT_ID_HERE&scope=bot&permissions=0 (Replace YOUR_APP_CLIENT_ID_HERE with the application id of the bot (see step 2)).
-8. Use command `node discaptcha` to run the bot. It should now appear to your server(s).
+8. Use command `node discaptcha` to run the bot. It should now appear online in your server(s).
 9. Create a new server role "bots" or similar and give it to the bot. The role should be on top of the other roles and have an "Administrator" permission enabled.
-10. In Discord, command the bot to install itself: `@Discaptcha install`. This must be done on all servers (guilds) where you want to use the bot. Do note that the process may take quite a while on large servers as the bot will give the verified role to all users.
+10. Give the bot a command to install itself: `@Discaptcha install`. This must be done on all servers (guilds) where you want to use the bot. Do note that the process may take quite a while on large servers as the bot will give the verified role to all users.
 
 That's all. Discaptcha is now functional. Type `@Discaptcha help` for a list of commands. You must always mention the bot to activate a command.
 
@@ -35,14 +35,13 @@ In order to use the bot, you are required to link the bot to the Discord applica
 
 *Note that some OSes may hide the file by default.*
 
-Create an `.env` file if you haven't already. And copy the following template into it:
 ```
 APP_TOKEN=replace_me
 APP_ID=replace_me
 OWNER_ID=replace_me
 ```
 
-Replace all the `replace_me` parts with actual values. Most of the values can be found from the [applications portal](https://discordapp.com/developers/applications/).
+Replace all `replace_me` values with actual values. Most of the values can be found from the [applications portal](https://discordapp.com/developers/applications/). The token is under the "Bot" page.
 
 - APP_TOKEN: token of the application.
 - APP_ID: id of the application.
