@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["es6", "dom", "es2017"],
+    "module": "commonjs",
+    "declaration": false,
+    "sourceMap": false,
+    "outDir": "./build",
+    "removeComments": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "types": ["node"],
+    "plugins": [
+      {
+        "name": "typescript-tslint-plugin"
+      }
+    ]
+  },
+  "include": [
+    "./src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/__tests__/*",
+  ]
+}

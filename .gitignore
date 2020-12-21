@@ -1,6 +1,4 @@
-node_modules/
-dist/
-yarn-error.log
-application_*
 .env
-config.json
+/.vscode
+/node_modules
+build
