@@ -62,50 +62,72 @@ Client.on('message', (Message) => {
         ) {
           // Commands that require owner-access.
           if (cmd === 'humanize') {
+            Message.channel
+              .send(
+                'Humanizing this server... 🧍\n\n' +
+                  'This may take a while. I will inform you when finished.'
+              )
+              .catch(() => {
+                p('Unable to speak. Permission issues?');
+              });
             humanize(guild)
               .then((msg) => {
                 Message.reply(msg).catch(() => {
-                  p('Unable to speak. Permission issues detected.');
+                  p('Unable to speak. Permission issues?');
                 });
               })
               .catch((msg) => {
                 Message.reply(msg).catch(() => {
-                  p('Unable to speak. Permission issues detected.');
+                  p('Unable to speak. Permission issues?');
                 });
               });
           } else if (cmd === 'install') {
             Message.channel
-              .send('Installing Discaptcha... This may take a while.')
+              .send(
+                'Installing Discaptcha... 👷\n\n' +
+                  'This may take a while. I will inform you when finished.'
+              )
               .catch(() => {
-                p('Unable to speak. Permission issues detected.');
+                p('Unable to speak. Permission issues?');
               });
             install(guild)
               .then((msg) => {
                 Message.reply(msg).catch(() => {
-                  p('Unable to speak. Permission issues detected.');
+                  p('Unable to speak. Permission issues?');
                 });
               })
               .catch((msg) => {
                 Message.reply(msg).catch(() => {
-                  p('Unable to speak. Permission issues detected.');
+                  p('Unable to speak. Permission issues?');
                 });
               });
           } else if (cmd === 'uninstall') {
+            Message.channel
+              .send(
+                'Uninstalling Discaptcha... 💣\n\n' +
+                  'This may take a while. I will inform you when finished.'
+              )
+              .catch(() => {
+                p('Unable to speak. Permission issues?');
+              });
             uninstall(guild)
               .then((msg) => {
                 Message.reply(msg).catch(() => {
-                  p('Unable to speak. Permission issues detected.');
+                  p('Unable to speak. Permission issues?');
                 });
               })
               .catch((msg) => {
                 Message.reply(msg).catch(() => {
-                  p('Unable to speak. Permission issues detected.');
+                  p('Unable to speak. Permission issues?');
                 });
               });
           }
         } else if (['verifyme'].includes(cmd)) {
           // Commands that are free for all.
           if (cmd === 'verifyme') {
+            Message.reply('I sent you a private message.').catch(() => {
+              p('Unable to speak. Permission issues?');
+            });
             verifyMember(member)
               .then((msg) => {
                 p(msg);
@@ -120,7 +142,7 @@ Client.on('message', (Message) => {
               ? 'the available commands for you are: humanize, install, uninstall and verifyme.'
               : 'the available commands for you are: verifyme.'
           ).catch(() => {
-            p('Unable to speak. Permission issues detected.');
+            p('Unable to speak. Permission issues?');
           });
         }
       }

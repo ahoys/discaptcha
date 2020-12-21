@@ -1,7 +1,7 @@
 import { Guild } from 'discord.js';
 import { lp, p } from 'logscribe';
 
-const roleName = process.env.ROLE_NAME || 'verified';
+const roleName = process.env.ROLE_NAME || 'Verified';
 
 /**
  * Removes Discaptcha roles.

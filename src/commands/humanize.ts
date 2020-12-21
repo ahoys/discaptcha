@@ -1,7 +1,7 @@
 import { Guild } from 'discord.js';
 import { lp, p } from 'logscribe';
 
-const roleName = process.env.ROLE_NAME || 'verified';
+const roleName = process.env.ROLE_NAME || 'Verified';
 
 /**
  * Verifies all current users (including users in offline).
@@ -19,26 +19,30 @@ export const humanize = (guild: Guild): Promise<string> =>
             guild.members
               .fetch()
               .then((members) => {
-                let failure = false;
-                for (const member of members.array()) {
+                const readyCallBack = () => {
+                  resolve('members of this guild are now humanized.');
+                };
+                const allMembers = members.array();
+                const len = allMembers.length;
+                let i = 0;
+                for (const member of allMembers) {
                   member.roles
                     .add(verifyRole)
                     .then((guildMember) => {
+                      i += 1;
                       p(
                         `Verified ${guildMember.user.username} ` +
                           `(${guildMember.user.id}).`
                       );
+                      if (i === len) {
+                        readyCallBack();
+                      }
                     })
                     .catch(() => {
-                      failure = true;
+                      reject(
+                        'Was unable to add a new role. Perhaps missing permissions?'
+                      );
                     });
-                }
-                if (failure) {
-                  reject(
-                    'Was unable to add a role. Perhaps missing permissions?'
-                  );
-                } else {
-                  resolve('members of this guild are now humanized.');
                 }
               })
               .catch((err) => {

@@ -1,7 +1,7 @@
 import { GuildMember } from 'discord.js';
 import { lp } from 'logscribe';
 
-const roleName = process.env.ROLE_NAME || 'verified';
+const roleName = process.env.ROLE_NAME || 'Verified';
 
 /**
  * Verifies the user to be a human.

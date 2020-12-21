@@ -2,7 +2,7 @@ import { Guild } from 'discord.js';
 import { lp, p } from 'logscribe';
 import { humanize } from './humanize';
 
-const roleName = process.env.ROLE_NAME || 'verified';
+const roleName = process.env.ROLE_NAME || 'Verified';
 
 /**
  * Creates a new verified role and assigns it to everyone.
@@ -26,7 +26,7 @@ const createAndAssignVerified = (
       reason: 'Discaptcha install command executed.',
     })
     .then(() => {
-      // Humanize all already existing users.
+      // Humanize existing users.
       humanize(guild)
         .then(() => {
           // Make sure the @everyone-role does not allow speaking.
@@ -71,7 +71,9 @@ export const install = (guild: Guild): Promise<string> =>
       guild.roles
         .fetch()
         .then((roles) => {
-          const verifyRole = roles.cache.find((r) => r.name === roleName);
+          const verifyRole = roles.cache.find(
+            (r) => r.name.toLowerCase() === roleName.toLowerCase()
+          );
           if (verifyRole) {
             // Old role found.
             verifyRole
