@@ -56,22 +56,30 @@ export const install = (guild: Guild): Promise<string> =>
   new Promise((resolve, reject) => {
     try {
       // Find and remove all existing verified roles.
-      const verifyRole = guild.roles.cache.find((r) => r.name === 'verified');
-      if (verifyRole) {
-        // Old role found.
-        verifyRole
-          .delete()
-          .then(() => {
+      guild.roles
+        .fetch()
+        .then((roles) => {
+          const verifyRole = roles.cache.find((r) => r.name === 'verified');
+          if (verifyRole) {
+            // Old role found.
+            verifyRole
+              .delete()
+              .then(() => {
+                createAndAssignVerified(guild, resolve, reject);
+              })
+              .catch((err) => {
+                lp(err);
+                reject('failed to remove the old verified role.');
+              });
+          } else {
+            // No old roles found.
             createAndAssignVerified(guild, resolve, reject);
-          })
-          .catch((err) => {
-            lp(err);
-            reject('failed to remove the old verified role.');
-          });
-      } else {
-        // No old roles found.
-        createAndAssignVerified(guild, resolve, reject);
-      }
+          }
+        })
+        .catch((err) => {
+          lp(err);
+          reject('failed to fetch existing roles.');
+        });
     } catch (err) {
       reject('failed to install.');
       lp(err);

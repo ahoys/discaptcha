@@ -1,6 +1,5 @@
 import DiscordJs, { Intents } from 'discord.js';
 import { config } from 'dotenv';
-import { getDataStore } from './db';
 import { p } from 'logscribe';
 import { botify } from './commands/botify';
 import { humanize } from './commands/humanize';
@@ -14,7 +13,6 @@ if (!APP_TOKEN || !APP_ID || !OWNER_ID) {
   throw new Error('Missing .env file or invalid values.');
 }
 
-const guildsDb = getDataStore('db_guilds.nedb');
 const intents = new Intents(Intents.NON_PRIVILEGED);
 intents.add('GUILD_MEMBERS');
 const Client = new DiscordJs.Client({ ws: { intents } });
@@ -53,7 +51,7 @@ Client.on('ready', () => {
  * Messages are used to control the bot.
  */
 Client.on('message', (Message) => {
-  if (guildsDb && Client.user && Message.mentions.has(Client.user.id)) {
+  if (Client.user && Message.mentions.has(Client.user.id)) {
     const { author, content, guild } = Message;
     if (author.id === OWNER_ID) {
       const supportedCommands = ['botify', 'humanize', 'install', 'test'];
