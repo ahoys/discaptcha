@@ -1,6 +1,6 @@
-const config = require('../../configs/config.json');
+const config = require('../../config.json');
 const guildUtil = require('./util.guild');
-const { l, p } = require('logscribe').default('util.verify', '\x1b[31m');
+const { l, p, lp } = require('logscribe').default('util.verify', '\x1b[31m');
 
 const oops =
   'Oops, there was a mistake. ' +

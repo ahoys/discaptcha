@@ -27,7 +27,7 @@ const isValidConfigObject = configObj => {
  * Returns a validated configuration object.
  * @param {string} dirPath - Path to a config-JSON file.
  */
-const getConfig = (dirPath = './configs/config.json') => {
+const getConfig = (dirPath = './config.json') => {
   try {
     const resolvedPath = path.resolve(dirPath);
     if (fs.existsSync(resolvedPath)) {

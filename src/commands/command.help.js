@@ -1,6 +1,7 @@
 const { lp } = require('logscribe').default('command.help', '\x1b[32m');
-const auth = require('../../configs/auth.json');
 const config = require('../../package.json');
+
+const owner = process.env.OWNER_ID || '';
 
 /**
  * Prints out all the available commands.
@@ -12,7 +13,7 @@ module.exports = (Client, Message, value = '') => {
       config.version
     }\n`;
     const commands = require('./index.js');
-    const isBotOwner = auth.owner === Message.author.id;
+    const isBotOwner = owner === Message.author.id;
     const keys = isBotOwner
       ? Object.keys(commands)
       : Object.keys(commands).filter(

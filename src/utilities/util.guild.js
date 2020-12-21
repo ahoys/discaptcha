@@ -1,4 +1,4 @@
-const config = require('../../configs/config.json');
+const config = require('../../config.json');
 const { l, lp } = require('logscribe').default('util.guild', '\x1b[31m');
 
 /**

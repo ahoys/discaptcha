@@ -1,4 +1,4 @@
-const config = require('../../configs/config.json');
+const config = require('../../config.json');
 const { lp } = require('logscribe').default('command.moderators', '\x1b[32m');
 
 /**

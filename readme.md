@@ -24,32 +24,19 @@ That's all. Discaptcha is now functional. Type `@Discaptcha help` for a list of 
 Tip: Use a separate hidden channel to control your bots.
 
 ## Configuration
-All configuration is done to the configs/auth.json and configs/config.json files. You should revise them before using the bot.
 
-### configs/auth.json
-This configuration file is used to authorize your bot against Discord. If the file does not exist in the /configs folder, create it. The file extension must be json!
-
-An example configuration for the auth.json is following:
+**Authentication for the bot**
+1. In the installation folder, create a new file called `.env`.
+2. Fill in the file:
 ```
-{
-  "token": "KSJFUDIAODI2NTM1MjkyOTM4.DxsMDexampleA0M7Epfyh7KP43kMdKLD92",
-  "id": "123456789012345678",
-  "owner": "876543210987654321"
-}
+APP_TOKEN=replace_me
+APP_ID=replace_me
+OWNER_ID=replace_me
 ```
+3. Replace values with your own values. You can find these values from your [Discord applications portal](https://discordapp.com/developers/applications/). `APP_TOKEN` is the bot's token, `APP_ID` is bot's id and `OWNER_ID` is your Discord id.
 
-**token:** Bot's token (don't share this with anyone!).
-
-**id:** Bot's client id.
-
-**owner:** Owner's client id (your id).
-
-Token and id information can be found from here: [https://discordapp.com/developers/applications/](https://discordapp.com/developers/applications/).
-
-To obtain your own id (owner), you can right click your name in Discord and select "copy id". If you can't make any commands, this id is probably wrong.
-
-### configs/config.json
-This configuration file is used to setup the guilds and bot behaviour.
+### config.json
+This configuration file is used to setup the guilds and bot behaviour. Create a new file called `config.json` in your installation folder.
 
 An example configuration for the config.json is following:
 ```

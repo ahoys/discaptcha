@@ -1,5 +1,6 @@
 node_modules/
 dist/
-auth.json
 yarn-error.log
 application_*
+.env
+config.json

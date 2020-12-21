@@ -4,8 +4,12 @@
  * License: MIT
  */
 const cluster = require('cluster');
+const { config } = require('dotenv');
 const { setLogDirPath } = require('logscribe');
 const { p, lp } = require('logscribe').default('General');
+
+// Load custom config variables.
+config({ path: __dirname + '/../.env' });
 
 // Set logs to root.
 setLogDirPath('./');
@@ -97,9 +101,10 @@ if (cluster.isMaster) {
   p('Starting Discaptcha...');
 
   // Get and validate authentication.
-  const authUtil = require('./utilities/util.auth');
-  const auth = authUtil.getAuth();
-  if (!auth) {
+  const APP_TOKEN = process.env.APP_TOKEN;
+  const APP_ID = process.env.APP_ID;
+  const OWNER_ID = process.env.OWNER_ID;
+  if (!APP_TOKEN || !APP_ID || !OWNER_ID) {
     lp('Invalid auth.');
     process.exit(1);
   }
@@ -128,7 +133,7 @@ if (cluster.isMaster) {
    * If the connection fails, try to re-connect.
    */
   const logInDiscord = () => {
-    Client.login(auth.token).catch(() => {
+    Client.login(APP_TOKEN).catch(() => {
       p(
         'Could not connect Discord.' +
           ` Attempting to reconnect in ${reconnectTime / 1000} seconds...`
@@ -160,6 +165,7 @@ if (cluster.isMaster) {
    * Triggers every time the bot sees a new message.
    */
   Client.on('message', Message => {
+    const { mentions } = Message;
     if (
       // Make sure the bot is mentioned.
       Message.isMentioned(Client.user.id)
@@ -175,7 +181,7 @@ if (cluster.isMaster) {
           Message,
           commands[c.command].permissions,
           config.moderators,
-          auth.owner
+          OWNER_ID
         ) &&
         !messageUtil.isGuildSpamming(Message.guild, config.guildSpamLimit)
       ) {
