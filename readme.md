@@ -50,15 +50,16 @@ Replace all the `replace_me` parts with actual values. Most of the values can be
 
 ## Security
 
-This bot does not store messages or user information. Everything happens in-memory and there are no databases involved.
+This bot does not store messages or user information. Everything happens in-memory as there are no databases involved.
 
 ## FAQ
 
 - The bot joined but doesn't function.
   - Make sure the bot has the bot role set.
-  - Make sure the bot role has the required privileges to function in your guild. Try giving it the `Administrator` role.
+  - Make sure the bot role has the required privileges to function in your guild. It should have the `Administrator` privilege set.
   - Make sure your .env file has the values properly set.
   - See if the bot's console shows anything or if the bot reacts to mentions. If not, the connection is broken, see the .env file.
 - The bot does not give the verified-role to users.
   - This is most likely a permission issue. See your discord server's roles. The bot should have administrator privileges and no other role should override it.
   - In the Discord applications page, make sure the bot has the "SERVER MEMBERS INTENT" setting enabled under the "Bot" page.
+  - Try running `@<bot's name> install` command again.
