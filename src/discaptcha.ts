@@ -74,6 +74,11 @@ Client.on('message', (Message) => {
                 });
               });
           } else if (cmd === 'install') {
+            Message.channel
+              .send('Installing Discaptcha... This may take a while.')
+              .catch(() => {
+                p('Unable to speak. Permission issues detected.');
+              });
             install(guild)
               .then((msg) => {
                 Message.reply(msg).catch(() => {

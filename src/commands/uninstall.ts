@@ -26,9 +26,7 @@ export const uninstall = (guild: Guild): Promise<string> =>
                 everyoneRole
                   .setPermissions(newPermissions)
                   .then(() => {
-                    resolve(
-                      'discaptcha specific configurations has been removed.'
-                    );
+                    resolve('Discaptcha specific configurations removed.');
                   })
                   .catch((err) => {
                     lp(err);
