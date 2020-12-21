@@ -21,7 +21,7 @@ It takes about 5-15 mins to install the bot.
 5. Create a new file called `.env` inside the extraction folder and read the [configuration section](https://github.com/ahoys/discaptcha#Configuration) below.
 6. Invite the bot to your server(s) with your web browser. Use the following url: https://discordapp.com/oauth2/authorize?&client_id=YOUR_APP_CLIENT_ID_HERE&scope=bot&permissions=0 (Replace YOUR_APP_CLIENT_ID_HERE with the application id of the bot (see step 2)).
 7. Use command `node discaptcha` to run the bot. It should now appear to your server(s).
-8. Create a new server role "bots" or similar and give it to the bot. The role should be on top of the other roles and have an "Administrator" privilege enabled.
+8. Create a new server role "bots" or similar and give it to the bot. The role should be on top of the other roles and have an "Administrator" permission enabled.
 9. In Discord, command the bot to install itself: `@Discaptcha install`. This must be done on all servers (guilds) where you want to use the bot.
 
 That's all. Discaptcha is now functional. Type `@Discaptcha help` for a list of commands. You must always mention the bot to activate a command.
@@ -56,10 +56,10 @@ This bot does not store messages or user information. Everything happens in-memo
 
 - The bot joined but doesn't function.
   - Make sure the bot has the bot role set.
-  - Make sure the bot role has the required privileges to function in your guild. It should have the `Administrator` privilege set.
+  - Make sure the bot role has the required permissions to function in your guild. It should have the `Administrator` permission set.
   - Make sure your .env file has the values properly set.
   - See if the bot's console shows anything or if the bot reacts to mentions. If not, the connection is broken, see the .env file.
 - The bot does not give the verified-role to users.
-  - This is most likely a permission issue. See your discord server's roles. The bot should have administrator privileges and no other role should override it.
+  - This is most likely a permission issue. See your discord server's roles. The bot should have administrator permissions and no other role should override it.
   - In the Discord applications page, make sure the bot has the "SERVER MEMBERS INTENT" setting enabled under the "Bot" page.
   - Try running `@<bot's name> install` command again.

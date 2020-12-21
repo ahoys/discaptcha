@@ -64,26 +64,38 @@ Client.on('message', (Message) => {
           if (cmd === 'humanize') {
             humanize(guild)
               .then((msg) => {
-                Message.reply(msg);
+                Message.reply(msg).catch(() => {
+                  p('Unable to speak. Permission issues detected.');
+                });
               })
               .catch((msg) => {
-                Message.reply(msg);
+                Message.reply(msg).catch(() => {
+                  p('Unable to speak. Permission issues detected.');
+                });
               });
           } else if (cmd === 'install') {
             install(guild)
               .then((msg) => {
-                Message.reply(msg);
+                Message.reply(msg).catch(() => {
+                  p('Unable to speak. Permission issues detected.');
+                });
               })
               .catch((msg) => {
-                Message.reply(msg);
+                Message.reply(msg).catch(() => {
+                  p('Unable to speak. Permission issues detected.');
+                });
               });
           } else if (cmd === 'uninstall') {
             uninstall(guild)
               .then((msg) => {
-                Message.reply(msg);
+                Message.reply(msg).catch(() => {
+                  p('Unable to speak. Permission issues detected.');
+                });
               })
               .catch((msg) => {
-                Message.reply(msg);
+                Message.reply(msg).catch(() => {
+                  p('Unable to speak. Permission issues detected.');
+                });
               });
           }
         } else if (['verifyme'].includes(cmd)) {
@@ -102,7 +114,9 @@ Client.on('message', (Message) => {
             author.id === OWNER_ID
               ? 'the available commands for you are: humanize, install, uninstall and verifyme.'
               : 'the available commands for you are: verifyme.'
-          );
+          ).catch(() => {
+            p('Unable to speak. Permission issues detected.');
+          });
         }
       }
     }

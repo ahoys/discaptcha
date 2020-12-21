@@ -1,5 +1,5 @@
 import { Guild } from 'discord.js';
-import { lp } from 'logscribe';
+import { lp, p } from 'logscribe';
 
 const roleName = process.env.ROLE_NAME || 'verified';
 
@@ -10,6 +10,7 @@ const roleName = process.env.ROLE_NAME || 'verified';
 export const uninstall = (guild: Guild): Promise<string> =>
   new Promise((resolve, reject) => {
     try {
+      p('Executing uninstall...');
       guild.roles
         .fetch()
         .then((roles) => {
@@ -31,7 +32,10 @@ export const uninstall = (guild: Guild): Promise<string> =>
                   })
                   .catch((err) => {
                     lp(err);
-                    reject('failed to reset @everyone permissions.');
+                    reject(
+                      'failed to reset @everyone permissions.' +
+                        "Perhaps I don't have all the required permissions?"
+                    );
                   });
               })
               .catch((err) => {

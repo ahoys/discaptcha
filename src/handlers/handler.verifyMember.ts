@@ -66,7 +66,9 @@ export const verifyMember = (guildMember: GuildMember): Promise<string> =>
                               'Verifying you failed. Please try to rejoin the ' +
                                 'server or contact the server owner for further support.'
                             );
-                            reject('Was unable to add a role.');
+                            reject(
+                              'Was unable to add a role. Perhaps missing permissions?'
+                            );
                           });
                       } else {
                         DMChannel.send(

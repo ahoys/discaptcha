@@ -1,5 +1,5 @@
 import { Guild } from 'discord.js';
-import { lp } from 'logscribe';
+import { lp, p } from 'logscribe';
 import { humanize } from './humanize';
 
 const roleName = process.env.ROLE_NAME || 'verified';
@@ -52,7 +52,10 @@ const createAndAssignVerified = (
     })
     .catch((err) => {
       lp(err);
-      reject('failed to create the verified role.');
+      reject(
+        `failed to create the verified role (${roleName}). ` +
+          "Perhaps I don't have all the required permissions?"
+      );
     });
 };
 
@@ -63,6 +66,7 @@ const createAndAssignVerified = (
 export const install = (guild: Guild): Promise<string> =>
   new Promise((resolve, reject) => {
     try {
+      p('Executing install...');
       // Find and remove all existing verified roles.
       guild.roles
         .fetch()

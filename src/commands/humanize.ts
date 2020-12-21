@@ -1,5 +1,5 @@
 import { Guild } from 'discord.js';
-import { lp } from 'logscribe';
+import { lp, p } from 'logscribe';
 
 const roleName = process.env.ROLE_NAME || 'verified';
 
@@ -10,6 +10,7 @@ const roleName = process.env.ROLE_NAME || 'verified';
 export const humanize = (guild: Guild): Promise<string> =>
   new Promise((resolve, reject) => {
     try {
+      p('Executing humanize...');
       guild.roles
         .fetch()
         .then((roles) => {
@@ -18,10 +19,27 @@ export const humanize = (guild: Guild): Promise<string> =>
             guild.members
               .fetch()
               .then((members) => {
+                let failure = false;
                 for (const member of members.array()) {
-                  member.roles.add(verifyRole);
+                  member.roles
+                    .add(verifyRole)
+                    .then((guildMember) => {
+                      p(
+                        `Verified ${guildMember.user.username} ` +
+                          `(${guildMember.user.id}).`
+                      );
+                    })
+                    .catch(() => {
+                      failure = true;
+                    });
                 }
-                resolve('members of this guild are now humanized.');
+                if (failure) {
+                  reject(
+                    'Was unable to add a role. Perhaps missing permissions?'
+                  );
+                } else {
+                  resolve('members of this guild are now humanized.');
+                }
               })
               .catch((err) => {
                 lp(err);
