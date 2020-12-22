@@ -74,7 +74,7 @@ Security wise, it's a good idea to give this role only to Discaptcha.
 
 ## Security
 
-This bot does not store messages or user information. Everything happens in-memory as there are no databases involved. The log may contain usernames and ids.
+This bot shares information with the Discord API only. The bot may generate log that may contain usernames and ids but the logs are not shared. As much as possible is done in-memory and there are no bot specific databases involved.
 
 ## FAQ
 
