@@ -16,30 +16,30 @@ export const uninstall = (guild: Guild): Promise<string> =>
         .then((roles) => {
           const verifyRole = roles.cache.find((r) => r.name === roleName);
           if (verifyRole) {
-            verifyRole
-              .delete('Discaptcha uninstall command executed.')
+            const everyoneRole = guild.roles.everyone;
+            const newPermissions = everyoneRole.permissions
+              .add('SEND_MESSAGES')
+              .add('SPEAK');
+            everyoneRole
+              .setPermissions(newPermissions)
               .then(() => {
-                const everyoneRole = guild.roles.everyone;
-                const newPermissions = everyoneRole.permissions
-                  .add('SEND_MESSAGES')
-                  .add('SPEAK');
-                everyoneRole
-                  .setPermissions(newPermissions)
+                verifyRole
+                  .delete('Discaptcha uninstall command executed.')
                   .then(() => {
                     resolve('Discaptcha specific configurations removed.');
                   })
                   .catch((err) => {
                     lp(err);
                     reject(
-                      'failed to reset @everyone permissions.' +
-                        "Perhaps I don't have all the required permissions?"
+                      'failed to remove the verified role. Uninstall aborted.'
                     );
                   });
               })
               .catch((err) => {
                 lp(err);
                 reject(
-                  'failed to remove the verified role. Uninstall aborted.'
+                  'failed to reset @everyone permissions.' +
+                    "Perhaps I don't have all the required permissions?"
                 );
               });
           } else {
