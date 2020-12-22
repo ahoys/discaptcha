@@ -28,16 +28,19 @@ export const humanize = (guild: Guild): Promise<string> =>
                         'Do I have the required permissions?'
                     );
                   } else if (failedNum) {
+                    p('Humanize finished.');
                     resolve(
                       `done, but could not humanize ${failedNum} member(s). ` +
                         'Maybe they left during the process?'
                     );
                   } else if (changed === 0) {
+                    p('Humanize finished.');
                     resolve(
                       'no humanizing necessary. ' +
                         `Everyone already got the "${roleName}" role.`
                     );
                   } else {
+                    p('Humanize finished.');
                     resolve('members of this guild are now humanized.');
                   }
                 };

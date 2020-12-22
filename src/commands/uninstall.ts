@@ -26,6 +26,7 @@ export const uninstall = (guild: Guild): Promise<string> =>
                 verifyRole
                   .delete('Discaptcha uninstall command executed.')
                   .then(() => {
+                    p('Uninstall finished.');
                     resolve('Discaptcha specific configurations removed.');
                   })
                   .catch((err) => {
@@ -43,6 +44,7 @@ export const uninstall = (guild: Guild): Promise<string> =>
                 );
               });
           } else {
+            p('The verified role was not found.');
             reject('unable to uninstall. No configurations found.');
           }
         })

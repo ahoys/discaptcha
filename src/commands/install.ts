@@ -37,6 +37,7 @@ const createAndAssignVerified = (
           everyoneRole
             .setPermissions(newPermissions)
             .then(() => {
+              p('Install finished.');
               resolve(
                 'installation done. Discaptcha is ready to serve this guild.'
               );
