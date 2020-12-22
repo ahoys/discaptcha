@@ -5,6 +5,13 @@ import { humanize } from '../commands/humanize';
 import { install } from '../commands/install';
 import { verifyMember } from '../handlers/handler.verifyMember';
 
+/**
+ * Executes the given commands.
+ * @param message Discord Message object in question.
+ * @param cmd The read command.
+ * @param isOwner Whether the caller is the owner.
+ * @param roleName Name of the verified-role.
+ */
 export const execCommands = (
   message: Message,
   cmd: string,
