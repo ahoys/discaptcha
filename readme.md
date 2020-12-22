@@ -48,6 +48,24 @@ Replace all `replace_me` values with actual values. Most of the values can be fo
 - OWNER_ID: your Discord id.
 - ROLE_NAME: optional custom name for the verified-role. By default: verified.
 
+## Commands
+
+`@Discaptcha install`
+Installs Discaptcha bot for the guild.
+1. Removes the old verified role (of the same name).
+2. Creates a new verified role with the correct permissions.
+3. Assigns the role to everyone (this may take a while).
+4. Disables writing and speaking permissions of `@everyone` role.
+
+`@Discaptcha humanize`
+Makes sure all the members on the server have the verified role. In case you have already installed Discaptcha once, this is much faster than re-installing.
+- Skips members who already got the role.
+
+`@Discaptcha uninstall`
+Removes Discaptcha bot's configurations. Useful when you are removing the bot from the server.
+1. Enables writing and speaking permissions of `@everyone` role.
+2. Removes the verified role (this will remove the role from the members too).
+
 ## Security
 
 This bot does not store messages or user information. Everything happens in-memory as there are no databases involved.
