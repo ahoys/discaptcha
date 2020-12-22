@@ -2,16 +2,16 @@ import { Guild } from 'discord.js';
 import { lp, p } from 'logscribe';
 import { humanize } from './humanize';
 
-const roleName = process.env.ROLE_NAME || 'Verified';
-
 /**
  * Creates a new verified role and assigns it to everyone.
  * @param {Guild} guild Discord guild in question.
+ * @param {string} roleName Name of the verified role.
  * @param {function} resolve Resolve callback.
  * @param {function} reject Reject callback.
  */
 const createAndAssignVerified = (
   guild: Guild,
+  roleName: string,
   resolve: (value: string | PromiseLike<string>) => void,
   reject: (reason?: string) => void
 ) => {
@@ -27,7 +27,7 @@ const createAndAssignVerified = (
     })
     .then(() => {
       // Humanize existing users.
-      humanize(guild)
+      humanize(guild, roleName)
         .then(() => {
           // Make sure the @everyone-role does not allow speaking.
           const everyoneRole = guild.roles.everyone;
@@ -63,8 +63,9 @@ const createAndAssignVerified = (
 /**
  * Installs Discaptcha for the guild.
  * @param {Guild} guild Discord guild in question.
+ * @param {string} roleName Name of the verified role.
  */
-export const install = (guild: Guild): Promise<string> =>
+export const install = (guild: Guild, roleName: string): Promise<string> =>
   new Promise((resolve, reject) => {
     try {
       p('Executing install...');
@@ -78,7 +79,7 @@ export const install = (guild: Guild): Promise<string> =>
             verifyRole
               .delete('Replacing the old role with a new one.')
               .then(() => {
-                createAndAssignVerified(guild, resolve, reject);
+                createAndAssignVerified(guild, roleName, resolve, reject);
               })
               .catch((err) => {
                 lp(err);
@@ -86,7 +87,7 @@ export const install = (guild: Guild): Promise<string> =>
               });
           } else {
             // No old roles found.
-            createAndAssignVerified(guild, resolve, reject);
+            createAndAssignVerified(guild, roleName, resolve, reject);
           }
         })
         .catch((err) => {

@@ -1,13 +1,15 @@
 import { GuildMember } from 'discord.js';
 import { lp } from 'logscribe';
 
-const roleName = process.env.ROLE_NAME || 'Verified';
-
 /**
  * Verifies the user to be a human.
  * @param {GuildMember} guildMember The user to be verified.
+ * @param {string} roleName Name of the verified role.
  */
-export const verifyMember = (guildMember: GuildMember): Promise<string> =>
+export const verifyMember = (
+  guildMember: GuildMember,
+  roleName: string
+): Promise<string> =>
   new Promise((resolve, reject) => {
     if (!guildMember) {
       reject('Missing guildMember,');

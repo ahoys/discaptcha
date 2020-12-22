@@ -1,13 +1,12 @@
 import { Guild } from 'discord.js';
 import { lp, p } from 'logscribe';
 
-const roleName = process.env.ROLE_NAME || 'Verified';
-
 /**
  * Removes Discaptcha roles.
  * @param {Guild} guild Discord guild in question.
+ * @param {string} roleName Name of the verified role.
  */
-export const uninstall = (guild: Guild): Promise<string> =>
+export const uninstall = (guild: Guild, roleName: string): Promise<string> =>
   new Promise((resolve, reject) => {
     try {
       p('Executing uninstall...');

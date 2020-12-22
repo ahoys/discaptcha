@@ -1,15 +1,15 @@
 import DiscordJs, { Intents } from 'discord.js';
 import { config } from 'dotenv';
 import { lp, p } from 'logscribe';
-import { uninstall } from './commands/uninstall';
-import { humanize } from './commands/humanize';
-import { install } from './commands/install';
 import { verifyMember } from './handlers/handler.verifyMember';
+import { execCommands } from './handlers/handler.execCommands';
 
 config({ path: __dirname + '/.env' });
-const { APP_TOKEN, APP_ID, OWNER_ID } = process.env;
+const { APP_TOKEN, APP_ID, OWNER_ID, ROLE_NAME } = process.env;
 
-if (!APP_TOKEN || !APP_ID || !OWNER_ID) {
+const roleName = ROLE_NAME || 'Verified';
+
+if (!APP_TOKEN || !APP_ID || !OWNER_ID || !roleName) {
   throw new Error('Missing .env file or invalid values.');
 }
 
@@ -53,97 +53,30 @@ Client.on('ready', () => {
 Client.on('message', (Message) => {
   try {
     if (Client.user && Message.mentions.has(Client.user.id)) {
-      const { author, content, guild, member } = Message;
+      const { content } = Message;
       const cmd = content.split(' ')[1];
-      if (typeof cmd === 'string' && guild && member) {
-        if (
-          author.id === OWNER_ID &&
-          ['humanize', 'install', 'uninstall'].includes(cmd)
-        ) {
-          // Commands that require owner-access.
-          if (cmd === 'humanize') {
-            Message.channel
-              .send(
-                'Humanizing this server... 🧍\n\n' +
-                  'This may take a while. I will inform you when finished.'
-              )
-              .catch(() => {
-                p('Unable to speak. Permission issues?');
-              });
-            humanize(guild)
-              .then((msg) => {
-                Message.reply(msg).catch(() => {
-                  p('Unable to speak. Permission issues?');
-                });
-              })
-              .catch((msg) => {
-                Message.reply(msg).catch(() => {
-                  p('Unable to speak. Permission issues?');
-                });
-              });
-          } else if (cmd === 'install') {
-            Message.channel
-              .send(
-                'Installing Discaptcha... 👷\n\n' +
-                  'This may take a while. I will inform you when finished.'
-              )
-              .catch(() => {
-                p('Unable to speak. Permission issues?');
-              });
-            install(guild)
-              .then((msg) => {
-                Message.reply(msg).catch(() => {
-                  p('Unable to speak. Permission issues?');
-                });
-              })
-              .catch((msg) => {
-                Message.reply(msg).catch(() => {
-                  p('Unable to speak. Permission issues?');
-                });
-              });
-          } else if (cmd === 'uninstall') {
-            Message.channel
-              .send(
-                'Uninstalling Discaptcha... 💣\n\n' +
-                  'This may take a while. I will inform you when finished.'
-              )
-              .catch(() => {
-                p('Unable to speak. Permission issues?');
-              });
-            uninstall(guild)
-              .then((msg) => {
-                Message.reply(msg).catch(() => {
-                  p('Unable to speak. Permission issues?');
-                });
-              })
-              .catch((msg) => {
-                Message.reply(msg).catch(() => {
-                  p('Unable to speak. Permission issues?');
-                });
-              });
-          }
-        } else if (['verifyme'].includes(cmd)) {
-          // Commands that are free for all.
-          if (cmd === 'verifyme') {
-            Message.reply('I sent you a private message.').catch(() => {
-              p('Unable to speak. Permission issues?');
-            });
-            verifyMember(member)
-              .then((msg) => {
-                p(msg);
-              })
-              .catch((msg) => {
-                p(msg);
-              });
-          }
+      // See if the message contains a command.
+      if (typeof cmd === 'string') {
+        const isAdministrator = Message.guild?.me?.hasPermission(
+          'ADMINISTRATOR'
+        );
+        const canSendMessages = Message.guild?.me?.hasPermission(
+          'SEND_MESSAGES'
+        );
+        if (isAdministrator) {
+          // We got all the permissions we require.
+          execCommands(Message, cmd, Message.author.id === OWNER_ID, roleName);
+        } else if (canSendMessages && !isAdministrator) {
+          // Inform about the missing permission.
+          Message.channel
+            .send(
+              "I don't have enough permissions to execute commands. " +
+                'Give me the administrator permission.'
+            )
+            .catch((err) => lp(err));
         } else {
-          Message.reply(
-            author.id === OWNER_ID
-              ? 'the available commands for you are: humanize, install, uninstall and verifyme.'
-              : 'the available commands for you are: verifyme.'
-          ).catch(() => {
-            p('Unable to speak. Permission issues?');
-          });
+          // No permissions at all.
+          lp('Was unable to function. ADMINISTRATOR permission is missing.');
         }
       }
     }
@@ -159,13 +92,9 @@ Client.on('message', (Message) => {
  */
 Client.on('guildMemberAdd', (GuildMember) => {
   try {
-    verifyMember(GuildMember)
-      .then((msg) => {
-        p(msg);
-      })
-      .catch((msg) => {
-        p(msg);
-      });
+    verifyMember(GuildMember, roleName)
+      .then((msg) => p(msg))
+      .catch((err) => lp(err));
   } catch (err) {
     lp(err);
   }

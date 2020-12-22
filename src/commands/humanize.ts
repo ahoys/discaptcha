@@ -1,13 +1,12 @@
 import { Guild } from 'discord.js';
 import { lp, p } from 'logscribe';
 
-const roleName = process.env.ROLE_NAME || 'Verified';
-
 /**
  * Verifies all current users (including users in offline).
  * @param {Guild} guild Discord guild in question.
+ * @param {string} roleName Name of the verified role.
  */
-export const humanize = (guild: Guild): Promise<string> =>
+export const humanize = (guild: Guild, roleName: string): Promise<string> =>
   new Promise((resolve, reject) => {
     try {
       p('Executing humanize...');
@@ -87,7 +86,7 @@ export const humanize = (guild: Guild): Promise<string> =>
               });
           } else {
             reject(
-              'the verified role was not found. Make sure to run "install" command first.'
+              `the "${roleName}" role was not found. Make sure to run "install" command first.`
             );
           }
         })
