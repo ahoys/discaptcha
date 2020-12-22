@@ -19,30 +19,63 @@ export const humanize = (guild: Guild): Promise<string> =>
             guild.members
               .fetch()
               .then((members) => {
-                const readyCallBack = () => {
-                  resolve('members of this guild are now humanized.');
-                };
                 const allMembers = members.array();
                 const len = allMembers.length;
+                const readyCallBack = (failedNum: number, changed: number) => {
+                  if (failedNum >= len) {
+                    reject(
+                      'failed to humanaize. ' +
+                        'Do I have the required permissions?'
+                    );
+                  } else if (failedNum) {
+                    resolve(
+                      `done, but could not humanize ${failedNum} member(s). ` +
+                        'Maybe they left during the process?'
+                    );
+                  } else if (changed === 0) {
+                    resolve(
+                      'no humanizing necessary. ' +
+                        `Everyone already got the "${roleName}" role.`
+                    );
+                  } else {
+                    resolve('members of this guild are now humanized.');
+                  }
+                };
                 let i = 0;
+                let r = 0;
+                let c = 0;
                 for (const member of allMembers) {
-                  member.roles
-                    .add(verifyRole)
-                    .then((guildMember) => {
-                      i += 1;
-                      p(
-                        `Verified ${guildMember.user.username} ` +
-                          `(${guildMember.user.id}).`
-                      );
-                      if (i === len) {
-                        readyCallBack();
-                      }
-                    })
-                    .catch(() => {
-                      reject(
-                        'Was unable to add a new role. Perhaps missing permissions?'
-                      );
-                    });
+                  if (
+                    member.roles.cache.find((role) => role.name === roleName)
+                  ) {
+                    // Already has the role.
+                    i += 1;
+                    if (i === len) {
+                      readyCallBack(r, c);
+                    }
+                  } else {
+                    // Missing the role.
+                    member.roles
+                      .add(verifyRole)
+                      .then((guildMember) => {
+                        i += 1;
+                        c += 1;
+                        p(
+                          `Verified ${guildMember.user.username} ` +
+                            `(${guildMember.user.id}).`
+                        );
+                        if (i === len) {
+                          readyCallBack(r, c);
+                        }
+                      })
+                      .catch(() => {
+                        r += 1;
+                        i += 1;
+                        if (i === len) {
+                          readyCallBack(r, c);
+                        }
+                      });
+                  }
                 }
               })
               .catch((err) => {
