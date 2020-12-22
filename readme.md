@@ -66,9 +66,15 @@ Removes Discaptcha bot's configurations. Useful when you are removing the bot fr
 1. Enables writing and speaking permissions of `@everyone` role.
 2. Removes the verified role (this will remove the role from the members too).
 
+## Permissions
+
+The bot requires the "Administrator" permission and the role should be on top of the other roles (first priority).
+
+Security wise, it's a good idea to give this role only to Discaptcha.
+
 ## Security
 
-This bot does not store messages or user information. Everything happens in-memory as there are no databases involved.
+This bot does not store messages or user information. Everything happens in-memory as there are no databases involved. The log may contain usernames and ids.
 
 ## FAQ
 
