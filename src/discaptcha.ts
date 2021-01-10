@@ -52,7 +52,11 @@ Client.on('ready', () => {
  */
 Client.on('message', (Message) => {
   try {
-    if (Client.user && Message.mentions.has(Client.user.id)) {
+    if (
+      Client.user &&
+      Message.mentions.has(Client.user.id) &&
+      !Message.mentions.everyone
+    ) {
       const { content } = Message;
       const cmd = content.split(' ')[1];
       // See if the message contains a command.
