@@ -61,12 +61,10 @@ Client.on('message', (Message) => {
       const cmd = content.split(' ')[1];
       // See if the message contains a command.
       if (typeof cmd === 'string') {
-        const isAdministrator = Message.guild?.me?.hasPermission(
-          'ADMINISTRATOR'
-        );
-        const canSendMessages = Message.guild?.me?.hasPermission(
-          'SEND_MESSAGES'
-        );
+        const isAdministrator =
+          Message.guild?.me?.hasPermission('ADMINISTRATOR');
+        const canSendMessages =
+          Message.guild?.me?.hasPermission('SEND_MESSAGES');
         if (isAdministrator) {
           // We got all the permissions we require.
           execCommands(Message, cmd, Message.author.id === OWNER_ID, roleName);
