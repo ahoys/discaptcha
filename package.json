@@ -4,7 +4,7 @@
   "author": "Ari Höysniemi",
   "license": "MIT",
   "scripts": {
-    "build": "yarn lint && tsc && cp package.json build/package.json && cp package-lock.json build/package-lock.json && cp .env build/.env",
+    "build": "tsc && cp package.json build/package.json && cp package-lock.json build/package-lock.json && cp .env build/.env",
     "start": "tsc && cp dev.env build/.env && node build/discaptcha",
     "lint": "./node_modules/.bin/tslint --project ./ --fix ./src/**"
   },

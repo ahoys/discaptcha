@@ -1,6 +1,6 @@
 # Discaptcha
 
-![alt text](https://github.com/ahoys/discaptcha/blob/master/src/assets/avatar_sm.png "Discaptcha")
+![alt text](https://github.com/ahoys/discaptcha/blob/master/assets/avatar_sm.png 'Discaptcha')
 
 **Version 2 now released!**
 
@@ -27,13 +27,13 @@ It takes about 5-15 mins to install the bot.
 
 That's all. Discaptcha is now functional. Type `@Discaptcha help` for a list of commands. You must always mention the bot to activate a command.
 
-*Tip: Use a separate hidden channel to test your bots.*
+_Tip: Use a separate hidden channel to test your bots._
 
 ## Configuration
 
 In order to use the bot, you are required to link the bot to the Discord application you created in the installation step 2. This linking is done by providing the bot some key values via an `.env`-file.
 
-*Note that some OSes may hide the file by default.*
+_Note that some OSes may hide the file by default._
 
 ```
 APP_TOKEN=replace_me
@@ -52,6 +52,7 @@ Replace all `replace_me` values with actual values. Most of the values can be fo
 
 `@Discaptcha install`
 Installs Discaptcha bot for the guild.
+
 1. Removes the old verified role (of the same name).
 2. Creates a new verified role with the correct permissions.
 3. Assigns the role to everyone (this may take a while).
@@ -59,10 +60,12 @@ Installs Discaptcha bot for the guild.
 
 `@Discaptcha humanize`
 Makes sure all the members on the server have the verified role. In case you have already installed Discaptcha once, this is much faster than re-installing.
+
 - Skips members who already got the role.
 
 `@Discaptcha uninstall`
 Removes Discaptcha bot's configurations. Useful when you are removing the bot from the server.
+
 1. Enables writing and speaking permissions of `@everyone` role.
 2. Removes the verified role (this will remove the role from the members too).
 
