@@ -1,5 +1,5 @@
-import { Message } from 'discord.js';
-import { lp, p } from 'logscribe';
+import { Guild, User } from 'discord.js';
+import { p } from 'logscribe';
 import { uninstall } from '../commands/uninstall';
 import { humanize } from '../commands/humanize';
 import { install } from '../commands/install';
@@ -13,92 +13,70 @@ import { verifyMember } from '../handlers/handler.verifyMember';
  * @param roleName Name of the verified-role.
  */
 export const execCommands = (
-  message: Message,
+  guild: Guild,
+  user: User,
   cmd: string,
   isOwner: boolean,
-  roleName: string
+  roleName: string,
+  messageCallback: (content: string) => void
 ) => {
   try {
-    const { guild, channel, member } = message;
-    if (guild && channel && member) {
+    if (guild && user) {
       if (cmd === 'humanize' && isOwner) {
-        message.channel
-          .send(
-            'Humanizing this server... 🧍\n\n' +
-              'This may take a while. I will inform you when finished.'
-          )
-          .then(() => {
-            humanize(guild, roleName)
-              .then((msg) => {
-                message.reply(msg).catch((err) => lp(err));
-              })
-              .catch((msg) => {
-                message.reply(msg).catch((err) => lp(err));
-              });
+        messageCallback(
+          'Humanizing this server... 🧍\n\n' +
+            'This may take a while. I will inform you when finished.'
+        );
+        humanize(guild, roleName)
+          .then((msg) => {
+            messageCallback(msg);
           })
-          .catch((err) => {
-            lp(err);
+          .catch((msg) => {
+            messageCallback(msg);
           });
       } else if (cmd === 'install' && isOwner) {
-        message.channel
-          .send(
-            'Installing Discaptcha... 👷\n\n' +
-              'This may take a while. I will inform you when finished.'
-          )
-          .then(() => {
-            install(guild, roleName)
-              .then((msg) => {
-                message.reply(msg).catch((err) => lp(err));
-              })
-              .catch((msg) => {
-                message.reply(msg).catch((err) => lp(err));
-              });
+        messageCallback(
+          'Installing Discaptcha... 👷\n\n' +
+            'This may take a while. I will inform you when finished.'
+        );
+        install(guild, roleName)
+          .then((msg) => {
+            messageCallback(msg);
           })
-          .catch((err) => {
-            lp(err);
+          .catch((msg) => {
+            messageCallback(msg);
           });
       } else if (cmd === 'uninstall' && isOwner) {
-        message.channel
-          .send(
-            'Uninstalling Discaptcha... 💣\n\n' +
-              'This may take a while. I will inform you when finished.'
-          )
-          .then(() => {
-            uninstall(guild, roleName)
-              .then((msg) => {
-                message.reply(msg).catch((err) => lp(err));
-              })
-              .catch((msg) => {
-                message.reply(msg).catch((err) => lp(err));
-              });
+        messageCallback(
+          'Uninstalling Discaptcha... 💣\n\n' +
+            'This may take a while. I will inform you when finished.'
+        );
+        uninstall(guild, roleName)
+          .then((msg) => {
+            messageCallback(msg);
           })
-          .catch((err) => {
-            lp(err);
+          .catch((msg) => {
+            messageCallback(msg);
           });
       } else if (cmd === 'verifyme') {
-        message
-          .reply('I sent you a private message.')
-          .then(() => {
-            verifyMember(member, roleName)
-              .then((msg) => p(msg))
-              .catch((msg) => lp(msg));
-          })
-          .catch((err) => lp(err));
+        messageCallback('I sent you a private message.');
+        const member = guild.members.cache.get(user.id);
+        if (member) {
+          verifyMember(member, roleName)
+            .then((msg) => p(msg))
+            .catch((msg) => p(msg));
+        }
       } else if (isOwner) {
-        message
-          .reply(
-            'available commands for you are: humanize, install, uninstall, verifyme.'
-          )
-          .catch((err) => lp(err));
+        messageCallback(
+          'available commands for you are: humanize, install, uninstall, verifyme.'
+        );
       } else {
-        message
-          .reply('available commands for you are: verifyme.')
-          .catch((err) => lp(err));
+        messageCallback('available commands for you are: verifyme.');
       }
     } else {
-      lp('Was unable to react to a command for an unknwon reason.');
+      p('Was unable to react to a command for an unknwon reason.');
     }
   } catch (err) {
-    lp(err);
+    p(err);
   }
 };

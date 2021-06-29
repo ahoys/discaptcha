@@ -93,8 +93,10 @@ export const verifyMember = (
                         'try contacting the moderators of the server.'
                     );
                     reject(
-                      'User verification failed. ' +
-                        'The reaction emoji was not clicked in time.'
+                      'User ' +
+                        guildMember.user.username +
+                        ' verification failed. ' +
+                        'The reaction emoji was not clicked in time: '
                     );
                   }
                 });
