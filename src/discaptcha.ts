@@ -5,27 +5,39 @@ import { p } from 'logscribe';
 import { verifyMember } from './handlers/handler.verifyMember';
 import { execCommands } from './handlers/handler.execCommands';
 
+// Load custom configurations.
 config({ path: __dirname + '/.env' });
-const { APP_TOKEN, APP_ID, OWNER_ID, ROLE_NAME } = process.env;
+const APP_TOKEN = process.env.APP_TOKEN ?? '';
+const APP_ID = process.env.APP_ID ?? '';
+const OWNER_ID = process.env.OWNER_ID ?? '';
+const ROLE_NAME = process.env.ROLE_NAME ?? 'Verified';
 
-const roleName = ROLE_NAME || 'Verified';
-
-if (!APP_TOKEN || !APP_ID || !OWNER_ID || !roleName) {
-  throw new Error('Missing .env file or invalid values.');
+// Look for invalid configuration.
+// The values here are approximations.
+if (
+  APP_TOKEN.length < 8 ||
+  APP_ID.length < 8 ||
+  OWNER_ID.length < 4 ||
+  ROLE_NAME.length < 1
+) {
+  throw new Error(
+    'Missing configuration. Create an ".env" file and add APP_TOKEN, APP_ID, OWNER_ID and ROLE_NAME values.'
+  );
 }
 
+// Create a new Discord client.
 const intents = new Intents(Intents.NON_PRIVILEGED);
 intents.add('GUILD_MEMBERS');
-const Client = new DiscordJs.Client({ ws: { intents } });
+const client = new DiscordJs.Client({ ws: { intents } });
+let reconnect: any = null;
 
 /**
- * Logs into Discord.
+ * Log-in the client.
+ * If the process fails, wait and try again.
  */
-let reconnect: any = null;
 const login = () => {
-  Client.login(APP_TOKEN).catch((err) => {
+  client.login(APP_TOKEN).catch((err) => {
     p(err);
-    console.error('Failed to login.');
     clearTimeout(reconnect);
     reconnect = setTimeout(() => {
       login();
@@ -34,15 +46,15 @@ const login = () => {
 };
 
 /**
- * The bot is ready to function.
- * Inform the user about it.
+ * The bot is ready to function (connected to Discord).
+ * Make sure all the required commands are registered.
  */
-Client.on('ready', () => {
+client.on('ready', () => {
   p(
     'Successfully connected to Discord!\n' +
-      `Username: ${Client.user?.username}\n` +
-      `Id: ${Client.user?.id}\n` +
-      `Verified: ${Client.user?.verified}\n` +
+      `Username: ${client.user?.username}\n` +
+      `Id: ${client.user?.id}\n` +
+      `Verified: ${client.user?.verified}\n` +
       'Waiting for events...'
   );
   // All the available commands to be registered.
@@ -128,14 +140,26 @@ Client.on('ready', () => {
 
 /**
  * A new guild member joined.
- * This is the main event as we are required to
+ * This is the "main event" as we are required to
  * verify member's "humanity".
  */
-Client.on('guildMemberAdd', (GuildMember) => {
+client.on('guildMemberAdd', (GuildMember) => {
   try {
-    verifyMember(GuildMember, roleName)
+    verifyMember(GuildMember, ROLE_NAME)
       .then((msg) => p(msg))
       .catch((err) => p(err));
+  } catch (err) {
+    p(err);
+  }
+});
+
+/**
+ * Something went wrong with Discord.
+ * Probably connection related issues.
+ */
+client.on('error', () => {
+  try {
+    login();
   } catch (err) {
     p(err);
   }
@@ -172,13 +196,14 @@ const makeInteractionCallback = (
 
 /**
  * Catches all interactions (slash commands) for the bot.
+ * This is how the bot is controlled.
  */
-Client.ws.on('INTERACTION_CREATE' as any, async (interaction) => {
+client.ws.on('INTERACTION_CREATE' as any, async (interaction) => {
   try {
-    Client.users
+    client.users
       .fetch(interaction.member.user.id)
       .then((user) => {
-        const guild = Client.guilds.cache.get(interaction.guild_id);
+        const guild = client.guilds.cache.get(interaction.guild_id);
         const channel = guild?.channels.cache.get(interaction.channel_id);
         const cmd = interaction.data.name.toLowerCase();
         if (OWNER_ID === interaction.member.user.id) {
@@ -197,7 +222,7 @@ Client.ws.on('INTERACTION_CREATE' as any, async (interaction) => {
               user,
               cmd,
               user.id === OWNER_ID,
-              roleName,
+              ROLE_NAME,
               (content) =>
                 makeInteractionCallback(
                   interaction.id,
@@ -227,18 +252,6 @@ Client.ws.on('INTERACTION_CREATE' as any, async (interaction) => {
       .catch((err) => {
         p(err);
       });
-  } catch (err) {
-    p(err);
-  }
-});
-
-/**
- * Something went wrong with Discord.
- * Probably Internet related issues.
- */
-Client.on('error', () => {
-  try {
-    login();
   } catch (err) {
     p(err);
   }
