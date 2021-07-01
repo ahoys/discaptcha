@@ -46,6 +46,7 @@ Replace all `replace_me` values with actual values. Most of the values can be fo
 - APP_TOKEN: token of the application.
 - APP_ID: id of the application.
 - OWNER_ID: your Discord id.
+- OWNER_ROLE: optional role id. All users with this role can control the bot.
 - ROLE_NAME: optional custom name for the verified-role. By default: verified.
 
 ## Commands
