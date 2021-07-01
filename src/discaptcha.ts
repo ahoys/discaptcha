@@ -1,4 +1,4 @@
-import DiscordJs, { Intents, TextChannel } from 'discord.js';
+import DiscordJs, { Intents } from 'discord.js';
 import superagent from 'superagent';
 import { config } from 'dotenv';
 import { p } from 'logscribe';
@@ -11,6 +11,7 @@ const APP_TOKEN = process.env.APP_TOKEN ?? '';
 const APP_ID = process.env.APP_ID ?? '';
 const OWNER_ID = process.env.OWNER_ID ?? '';
 const ROLE_NAME = process.env.ROLE_NAME ?? 'Verified';
+p(`Discaptcha is starting for application id ${APP_ID}...`);
 
 // Look for invalid configuration.
 // The values here are approximations.
@@ -50,92 +51,8 @@ const login = () => {
  * Make sure all the required commands are registered.
  */
 client.on('ready', () => {
-  p(
-    'Successfully connected to Discord!\n' +
-      `Username: ${client.user?.username}\n` +
-      `Id: ${client.user?.id}\n` +
-      `Verified: ${client.user?.verified}\n` +
-      'Waiting for events...'
-  );
-  // All the available commands to be registered.
-  const commands = [
-    {
-      name: 'install',
-      description: 'Installs the bot for the guild.',
-    },
-    {
-      name: 'uninstall',
-      description: 'Uninstalls the bot from the guild.',
-    },
-    {
-      name: 'humanize',
-      description: 'Makes all the currently present users verified.',
-    },
-    {
-      name: 'verifyme',
-      description:
-        'For testing purposes, you can manually trigger the verification process.',
-    },
-  ];
-  // Setup slash commands.
-  superagent
-    .get(`https://discord.com/api/v8/applications/${APP_ID}/commands`)
-    .type('application/json')
-    .set('Authorization', `Bot ${APP_TOKEN}`)
-    .then((res) => {
-      const body = res?.body;
-      if (body) {
-        // Names of commands that should be registered.
-        const names: string[] = commands.map(
-          (cmd: { name: string }) => cmd.name ?? ''
-        );
-        // Names of commands that actually are registered.
-        const storedNames: string[] = body.map(
-          (cmd: { name: string }) => cmd.name ?? ''
-        );
-        // Add missing commands to the registry.
-        commands.forEach((cmd) => {
-          if (!storedNames.includes(cmd.name)) {
-            superagent
-              .post(
-                `https://discord.com/api/v8/applications/${APP_ID}/commands`
-              )
-              .type('application/json')
-              .set('Authorization', `Bot ${APP_TOKEN}`)
-              .send(cmd)
-              .then(() => {
-                p(`Registered a missing slash command: ${cmd.name}.`);
-              })
-              .catch((err) => {
-                p(err);
-              });
-          }
-        });
-        // Remove extra commands from registry.
-        const extras = body.filter(
-          (cmd: { name: string }) => !names.includes(cmd.name)
-        );
-        extras.forEach((cmd: { id: string; name: string }) => {
-          superagent
-            .delete(
-              `https://discord.com/api/v8/applications/${APP_ID}/commands/${cmd.id}`
-            )
-            .type('application/json')
-            .set('Authorization', `Bot ${APP_TOKEN}`)
-            .then(() => {
-              p(`Removed an extra slash command: ${cmd.name}.`);
-            })
-            .catch((err) => {
-              p(err);
-            });
-        });
-      } else {
-        p('Discord API returned an invalid body.');
-      }
-    })
-    .catch((err) => {
-      p(err);
-    });
+  p(`Succesfully connected to Discord as ${client.user?.username}.`);
+  p('Discaptcha is ready.');
 });
 
 /**
@@ -257,5 +174,216 @@ client.ws.on('INTERACTION_CREATE' as any, async (interaction) => {
   }
 });
 
-// Login to Discord.
-login();
+// A suitable command object for the Discord API.
+interface ICommand {
+  [key: string]: string | boolean | undefined;
+  name: string;
+  description: string;
+  default_permission?: boolean;
+}
+
+// Discord API command response.
+interface IApplicationCommandStructure {
+  [key: string]: string | boolean | undefined;
+  id: string;
+  application_id: string;
+  guild_id?: string;
+  name: string;
+  description: string;
+  default_permission?: boolean;
+}
+
+// The currently usable commands.
+const commands: ICommand[] = [
+  {
+    name: 'install',
+    description: 'Installs the bot for the guild.',
+  },
+  {
+    name: 'uninstall',
+    description: 'Uninstalls the bot from the guild.',
+  },
+  {
+    name: 'humanize',
+    description: 'Makes all the currently present users verified.',
+  },
+  {
+    name: 'verifyme',
+    description:
+      'For testing purposes, you can manually trigger the verification process.',
+  },
+];
+
+/**
+ * Creates a new global interaction command for the bot.
+ * Used to register slash commands with the Discord API.
+ */
+const createCommand = (data: ICommand): Promise<void> =>
+  new Promise((resolve, reject) => {
+    try {
+      superagent
+        .post(`https://discord.com/api/v8/applications/${APP_ID}/commands`)
+        .type('application/json')
+        .set('Authorization', `Bot ${APP_TOKEN}`)
+        .send(data)
+        .then(() => {
+          p('Registered a new slash command:', data.name);
+          resolve();
+        })
+        .catch((err) => {
+          p(err);
+          reject();
+        });
+    } catch (err) {
+      p(err);
+      reject();
+    }
+  });
+
+/**
+ * Updates an existing interaction command.
+ * Used to update deprecated data of a command.
+ */
+const updateCommand = (data: ICommand, id: string): Promise<void> =>
+  new Promise((resolve, reject) => {
+    try {
+      superagent
+        .patch(
+          `https://discord.com/api/v8/applications/${APP_ID}/commands/${id}`
+        )
+        .type('application/json')
+        .set('Authorization', `Bot ${APP_TOKEN}`)
+        .send(data)
+        .then(() => {
+          p('Updated an out-of-date slash command.');
+          resolve();
+        })
+        .catch((err) => {
+          p(err);
+          reject();
+        });
+    } catch (err) {
+      p(err);
+      reject();
+    }
+  });
+
+/**
+ * Removes an interaction command.
+ * Used to remove deprecated slash commands from Discord API.
+ */
+const removeCommand = (id: string): Promise<void> =>
+  new Promise((resolve, reject) => {
+    try {
+      superagent
+        .delete(
+          `https://discord.com/api/v8/applications/${APP_ID}/commands/${id}`
+        )
+        .type('application/json')
+        .set('Authorization', `Bot ${APP_TOKEN}`)
+        .then(() => {
+          p('Removed a deprecated slash command.');
+          resolve();
+        })
+        .catch((err) => {
+          p(err);
+          reject();
+        });
+    } catch (err) {
+      p(err);
+      reject();
+    }
+  });
+
+/**
+ * Verifies that all interaction commands are up-to-date.
+ * Missing ones are created, invalid are updated and deprecated removed.
+ */
+const verifyCommands = (): Promise<void> =>
+  new Promise((resolve, reject) => {
+    try {
+      p('Verifying commands...');
+      superagent
+        .get(`https://discord.com/api/v8/applications/${APP_ID}/commands`)
+        .type('application/json')
+        .set('Authorization', `Bot ${APP_TOKEN}`)
+        .then((res) => {
+          const body = res?.body as IApplicationCommandStructure[];
+          if (typeof body === 'object') {
+            const promises: Promise<void>[] = [];
+            // The current commands in the Discord API by name.
+            const existing = body.map((command) => command.name);
+            const shouldBeExisting = commands.map((command) => command.name);
+            // Missing commands.
+            const missing = commands.filter(
+              (command) => !existing.includes(command.name)
+            );
+            // Registered commands (may be outdated).
+            const registered = commands.filter((command) =>
+              existing.includes(command.name)
+            );
+            // Deprecated that have been removed.
+            const extra = body.filter(
+              (command) =>
+                typeof command.id === 'string' &&
+                typeof command.name === 'string' &&
+                !shouldBeExisting.includes(command.name)
+            );
+            // First, let's add the missing commands.
+            missing.forEach((command) => {
+              promises.push(createCommand(command));
+            });
+            // Then make sure the existing commands are valid.
+            registered.forEach((command) => {
+              const registeredTarget = body.find(
+                (bodyCommand) => bodyCommand.name === command.name
+              );
+              if (
+                registeredTarget &&
+                Object.keys(command).some(
+                  (key: string) => command[key] !== registeredTarget[key]
+                )
+              ) {
+                promises.push(updateCommand(command, registeredTarget.id));
+              }
+            });
+            // Finally we remove the extra commands.
+            extra.forEach((command) => {
+              promises.push(removeCommand(command.id));
+            });
+            // Continue when done.
+            Promise.all(promises)
+              .then(() => {
+                p('All commands verified.');
+                resolve();
+              })
+              .catch(() => {
+                reject();
+              });
+          } else {
+            p('Discord API gave an invalid response. Missing body.');
+            reject();
+          }
+        })
+        .catch((err) => {
+          p(err);
+          reject();
+        });
+    } catch (err) {
+      p(err);
+      reject();
+    }
+  });
+
+// Start the "engine" and login to Discord.
+verifyCommands()
+  .then(() => {
+    login();
+  })
+  .catch(() => {
+    throw new Error(
+      'Was unable to verify slash commands. ' +
+        'Connection issues or perhaps the Discord API has changed? ' +
+        'Look for Discaptcha updates.'
+    );
+  });
