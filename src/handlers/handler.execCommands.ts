@@ -16,13 +16,12 @@ export const execCommands = (
   guild: Guild,
   user: User,
   cmd: string,
-  isOwner: boolean,
   roleName: string,
   messageCallback: (content: string) => void
 ) => {
   try {
     if (guild && user) {
-      if (cmd === 'humanize' && isOwner) {
+      if (cmd === 'humanize') {
         messageCallback(
           'Humanizing this server... 🧍\n\n' +
             'This may take a while. I will inform you when finished.'
@@ -34,7 +33,7 @@ export const execCommands = (
           .catch((msg) => {
             messageCallback(msg);
           });
-      } else if (cmd === 'install' && isOwner) {
+      } else if (cmd === 'install') {
         messageCallback(
           'Installing Discaptcha... 👷\n\n' +
             'This may take a while. I will inform you when finished.'
@@ -46,7 +45,7 @@ export const execCommands = (
           .catch((msg) => {
             messageCallback(msg);
           });
-      } else if (cmd === 'uninstall' && isOwner) {
+      } else if (cmd === 'uninstall') {
         messageCallback(
           'Uninstalling Discaptcha... 💣\n\n' +
             'This may take a while. I will inform you when finished.'
@@ -66,12 +65,10 @@ export const execCommands = (
             .then((msg) => p(msg))
             .catch((msg) => p(msg));
         }
-      } else if (isOwner) {
+      } else {
         messageCallback(
           'available commands for you are: humanize, install, uninstall, verifyme.'
         );
-      } else {
-        messageCallback('available commands for you are: verifyme.');
       }
     } else {
       p('Was unable to react to a command for an unknwon reason.');

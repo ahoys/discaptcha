@@ -1,4 +1,4 @@
-import DiscordJs, { Intents } from 'discord.js';
+import DiscordJs, { Guild, Intents } from 'discord.js';
 import superagent from 'superagent';
 import { config } from 'dotenv';
 import { p } from 'logscribe';
@@ -10,6 +10,7 @@ config({ path: __dirname + '/.env' });
 const APP_TOKEN = process.env.APP_TOKEN ?? '';
 const APP_ID = process.env.APP_ID ?? '';
 const OWNER_ID = process.env.OWNER_ID ?? '';
+const OWNER_ROLE = process.env.OWNER_ROLE ?? '';
 const ROLE_NAME = process.env.ROLE_NAME ?? 'Verified';
 p(`Discaptcha is starting for application id ${APP_ID}...`);
 
@@ -18,7 +19,7 @@ p(`Discaptcha is starting for application id ${APP_ID}...`);
 if (
   APP_TOKEN.length < 8 ||
   APP_ID.length < 8 ||
-  OWNER_ID.length < 4 ||
+  (OWNER_ID.length < 4 && OWNER_ROLE.length < 4) ||
   ROLE_NAME.length < 1
 ) {
   throw new Error(
@@ -117,58 +118,56 @@ const makeInteractionCallback = (
  */
 client.ws.on('INTERACTION_CREATE' as any, async (interaction) => {
   try {
-    client.users
-      .fetch(interaction.member.user.id)
-      .then((user) => {
-        const guild = client.guilds.cache.get(interaction.guild_id);
-        const channel = guild?.channels.cache.get(interaction.channel_id);
-        const cmd = interaction.data.name.toLowerCase();
-        if (OWNER_ID === interaction.member.user.id) {
-          const isAdministrator = guild?.me?.hasPermission('ADMINISTRATOR');
-          const canSendMessages = guild?.me?.hasPermission('SEND_MESSAGES');
-          if (
-            isAdministrator &&
-            guild &&
-            user &&
-            channel &&
-            channel.type === 'text'
-          ) {
-            // We got all the permissions we require.
-            execCommands(
-              guild,
-              user,
-              cmd,
-              user.id === OWNER_ID,
-              ROLE_NAME,
-              (content) =>
-                makeInteractionCallback(
-                  interaction.id,
-                  interaction.token,
-                  content
-                )
+    const requesterId: string = interaction?.member?.user?.id ?? '';
+    const requesterRoles: string[] = interaction?.member?.roles ?? [];
+    const hasTheRole = OWNER_ROLE !== '' && requesterRoles.includes(OWNER_ROLE);
+    const isTheOwner = requesterId === OWNER_ID;
+    if (hasTheRole || isTheOwner) {
+      client.guilds
+        .fetch(interaction?.guild_id)
+        .then((guild) => {
+          if (!guild) {
+            p(
+              `Unable to find guild ${interaction?.guild_id}. This is unexpected.`
             );
-          } else if (
-            canSendMessages &&
-            !isAdministrator &&
-            channel &&
-            channel.type === 'text'
-          ) {
-            // Inform about the missing permission.
-            makeInteractionCallback(
-              interaction.id,
-              interaction.token,
-              "I don't have enough permissions to execute commands. " +
-                'Give me administrator privileges.'
+          } else if (!guild.me?.hasPermission('ADMINISTRATOR')) {
+            p(
+              `Discaptcha doesn't have the administrator flag enabled in ${guild.name}. ` +
+                'Insufficent privileges to function.'
+            );
+          } else if (!guild.me?.hasPermission('SEND_MESSAGES')) {
+            p(
+              `Discaptcha can't send messages to this guild (${guild.name}). ` +
+                'Insufficient privileges to function.'
             );
           } else {
-            // No permissions at all.
-            p('Was unable to function. ADMINISTRATOR permission is missing.');
+            // We have all the required privileges. Let's go and
+            // trigger the interaction.
+            client.users
+              .fetch(requesterId)
+              .then((user) => {
+                execCommands(
+                  guild,
+                  user,
+                  interaction?.data?.name.toLowerCase(),
+                  ROLE_NAME,
+                  (content) =>
+                    makeInteractionCallback(
+                      interaction.id,
+                      interaction.token,
+                      content
+                    )
+                );
+              })
+              .catch((err) => {
+                p('Could not fetch the requester user.', err);
+              });
           }
-        }
-      })
-      .catch((err) => {
-        p(err);
-      });
+        })
+        .catch((err) => {
+          p('Unable to find the guild.', err);
+        });
+    }
   } catch (err) {
     p(err);
   }
