@@ -17,10 +17,10 @@ p(`Discaptcha is starting for application id ${APP_ID}...`);
 // Look for invalid configuration.
 // The values here are approximations.
 if (
-  APP_TOKEN.length < 8 ||
-  APP_ID.length < 8 ||
-  (OWNER_ID.length < 4 && OWNER_ROLE.length < 4) ||
-  ROLE_NAME.length < 1
+  APP_TOKEN === '' ||
+  APP_ID === '' ||
+  (OWNER_ID === '' && OWNER_ROLE === '') ||
+  ROLE_NAME === ''
 ) {
   throw new Error(
     'Missing configuration. Create an ".env" file and add APP_TOKEN, APP_ID, OWNER_ID and ROLE_NAME values.'
