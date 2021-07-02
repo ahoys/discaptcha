@@ -1,5 +1,5 @@
 import { GuildMember } from 'discord.js';
-import { lp } from 'logscribe';
+import { p } from 'logscribe';
 
 /**
  * Verifies the user to be a human.
@@ -12,7 +12,7 @@ export const verifyMember = (
 ): Promise<string> =>
   new Promise((resolve, reject) => {
     if (!guildMember) {
-      reject('Missing guildMember,');
+      reject('Could not find the guild member.');
     }
     // First create a DM-channel and send a welcome message with
     // instructions.
@@ -63,7 +63,7 @@ export const verifyMember = (
                             );
                           })
                           .catch((err) => {
-                            lp(err);
+                            p(err);
                             DMChannel.send(
                               'Verifying you failed. Please try to rejoin the ' +
                                 'server or contact the server owner for further support.'

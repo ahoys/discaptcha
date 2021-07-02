@@ -1,9 +1,12 @@
-import DiscordJs, { Guild, Intents } from 'discord.js';
+import DiscordJs, { GuildChannel, Intents } from 'discord.js';
+import install from './commands/install';
+import uninstall from './commands/uninstall';
+import humanize from './commands/humanize';
+import verifyme from './commands/verifyme';
 import superagent from 'superagent';
 import { config } from 'dotenv';
 import { p } from 'logscribe';
 import { verifyMember } from './handlers/handler.verifyMember';
-import { execCommands } from './handlers/handler.execCommands';
 
 // Load custom configurations.
 config({ path: __dirname + '/.env' });
@@ -83,96 +86,6 @@ client.on('error', () => {
   }
 });
 
-/**
- * Triggers an interaction callback. The point is to respond to an
- * interaction. Without this, the interaction will show as failed.
- * https://discord.com/developers/docs/interactions/slash-commands#interaction-response-object-interaction-callback-type
- */
-const makeInteractionCallback = (
-  id: string,
-  token: string,
-  content: string
-) => {
-  try {
-    superagent
-      .post(`https://discord.com/api/v8/interactions/${id}/${token}/callback`)
-      .type('application/json')
-      .set('Authorization', `Bot ${APP_TOKEN}`)
-      .send({
-        type: 4,
-        data: {
-          content,
-        },
-      })
-      .catch((err) => {
-        p(err);
-      });
-  } catch (err) {
-    p(err);
-  }
-};
-
-/**
- * Catches all interactions (slash commands) for the bot.
- * This is how the bot is controlled.
- */
-client.ws.on('INTERACTION_CREATE' as any, async (interaction) => {
-  try {
-    const requesterId: string = interaction?.member?.user?.id ?? '';
-    const requesterRoles: string[] = interaction?.member?.roles ?? [];
-    const hasTheRole = OWNER_ROLE !== '' && requesterRoles.includes(OWNER_ROLE);
-    const isTheOwner = requesterId === OWNER_ID;
-    if (hasTheRole || isTheOwner) {
-      client.guilds
-        .fetch(interaction?.guild_id)
-        .then((guild) => {
-          if (!guild) {
-            p(
-              `Unable to find guild ${interaction?.guild_id}. This is unexpected.`
-            );
-          } else if (!guild.me?.hasPermission('ADMINISTRATOR')) {
-            p(
-              `Discaptcha doesn't have the administrator flag enabled in ${guild.name}. ` +
-                'Insufficent privileges to function.'
-            );
-          } else if (!guild.me?.hasPermission('SEND_MESSAGES')) {
-            p(
-              `Discaptcha can't send messages to this guild (${guild.name}). ` +
-                'Insufficient privileges to function.'
-            );
-          } else {
-            // We have all the required privileges. Let's go and
-            // trigger the interaction.
-            client.users
-              .fetch(requesterId)
-              .then((user) => {
-                execCommands(
-                  guild,
-                  user,
-                  interaction?.data?.name.toLowerCase(),
-                  ROLE_NAME,
-                  (content) =>
-                    makeInteractionCallback(
-                      interaction.id,
-                      interaction.token,
-                      content
-                    )
-                );
-              })
-              .catch((err) => {
-                p('Could not fetch the requester user.', err);
-              });
-          }
-        })
-        .catch((err) => {
-          p('Unable to find the guild.', err);
-        });
-    }
-  } catch (err) {
-    p(err);
-  }
-});
-
 // A suitable command object for the Discord API.
 interface ICommand {
   [key: string]: string | boolean | undefined;
@@ -195,23 +108,173 @@ interface IApplicationCommandStructure {
 // The currently usable commands.
 const commands: ICommand[] = [
   {
-    name: 'install',
-    description: 'Installs the bot for the guild.',
+    name: install.name,
+    description: install.description,
   },
   {
-    name: 'uninstall',
-    description: 'Uninstalls the bot from the guild.',
+    name: uninstall.name,
+    description: uninstall.description,
   },
   {
-    name: 'humanize',
-    description: 'Makes all the currently present users verified.',
+    name: humanize.name,
+    description: humanize.description,
   },
   {
-    name: 'verifyme',
-    description:
-      'For testing purposes, you can manually trigger the verification process.',
+    name: verifyme.name,
+    description: verifyme.description,
   },
 ];
+
+/**
+ * Posts a response to an interaction.
+ * This should be done ASAP after receiving an interaction.
+ */
+const respondToInteraction = (
+  id: string,
+  token: string,
+  content: string
+): Promise<void> =>
+  new Promise((resolve, reject) => {
+    try {
+      superagent
+        .post(`https://discord.com/api/v8/interactions/${id}/${token}/callback`)
+        .type('application/json')
+        .send({
+          type: 4,
+          data: {
+            content,
+          },
+        })
+        .then(() => {
+          resolve();
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    } catch (err) {
+      reject(err);
+    }
+  });
+
+/**
+ * Sends a message to a channel if a text channel.
+ */
+const sendToTextChannel = (guildChannel: GuildChannel, content: string) => {
+  try {
+    if (guildChannel.isText() && content.trim() !== '') {
+      guildChannel.send(content).catch((err) => p(err));
+    }
+  } catch (err) {
+    p(err);
+  }
+};
+
+/**
+ * Catches all interactions (slash commands) for the bot.
+ * This is how the bot is controlled.
+ */
+client.ws.on('INTERACTION_CREATE' as any, async (interaction) => {
+  try {
+    const id: string = interaction?.id ?? '';
+    const token: string = interaction?.token ?? '';
+    const requesterId: string = interaction?.member?.user?.id ?? '';
+    const requesterRoles: string[] = interaction?.member?.roles ?? [];
+    const hasTheRole = OWNER_ROLE !== '' && requesterRoles.includes(OWNER_ROLE);
+    const isTheOwner = requesterId === OWNER_ID;
+    if (hasTheRole || isTheOwner) {
+      client.guilds
+        .fetch(interaction?.guild_id ?? '')
+        .then((guild) => {
+          const channel = guild?.channels.cache.get(interaction?.channel_id);
+          if (!guild) {
+            p(
+              `Unable to find guild "${interaction?.guild_id}". This is unexpected.`
+            );
+          } else if (!guild.me?.hasPermission('SEND_MESSAGES')) {
+            p(
+              `Discaptcha can't send messages to guild "${guild.name}". ` +
+                'Insufficient privileges to function.'
+            );
+          } else if (!channel || !channel.isText()) {
+            p('Discaptcha commands should be activated on a text channel.');
+          } else if (!guild.me?.hasPermission('ADMINISTRATOR')) {
+            const content =
+              `Discaptcha doesn't have the administrator flag enabled in "${guild.name}". ` +
+              'Insufficent privileges to function.';
+            respondToInteraction(id, token, content);
+            p(content);
+          } else {
+            // We have all the required privileges. Let's go and
+            // trigger the command.
+            const cmdName = interaction?.data?.name.toLowerCase();
+            if (cmdName === 'install') {
+              respondToInteraction(
+                id,
+                token,
+                'Installing Discaptcha... 👷\n\n' +
+                  'This may take a while. I will inform you when the work is done.'
+              )
+                .then(() =>
+                  install
+                    .execute(guild, ROLE_NAME)
+                    .then((content) => sendToTextChannel(channel, content))
+                    .catch((content) => sendToTextChannel(channel, content))
+                )
+                .catch((err) => p(err));
+            } else if (cmdName === 'humanize') {
+              respondToInteraction(
+                id,
+                token,
+                'Humanizing this server... 🧍\n\n' +
+                  'This may take a while. I will inform you when the work is done.'
+              )
+                .then(() =>
+                  humanize
+                    .execute(guild, ROLE_NAME)
+                    .then((content) => sendToTextChannel(channel, content))
+                    .catch((content) => sendToTextChannel(channel, content))
+                )
+                .catch((err) => p(err));
+            } else if (cmdName === 'uninstall') {
+              respondToInteraction(
+                id,
+                token,
+                'Uninstalling Discaptcha... 💣\n\n' +
+                  'This may take a while. I will inform you when finished.'
+              )
+                .then(() =>
+                  uninstall
+                    .execute(guild, ROLE_NAME)
+                    .then((content) => sendToTextChannel(channel, content))
+                    .catch((content) => sendToTextChannel(channel, content))
+                )
+                .catch((err) => p(err));
+            } else if (cmdName === 'verifyme') {
+              respondToInteraction(id, token, 'I sent you a private message.')
+                .then(() =>
+                  verifyme
+                    .execute(guild, ROLE_NAME, requesterId)
+                    .then((content) => sendToTextChannel(channel, content))
+                    .catch((content) => sendToTextChannel(channel, content))
+                )
+                .catch((err) => p(err));
+            }
+          }
+        })
+        .catch((err) => {
+          p('Unable to find the guild.', err);
+        });
+    } else {
+      const userId = interaction?.user?.id;
+      const username = interaction?.user?.username;
+      if (userId) {
+        p(`An invalid interaction attempt from user: ${userId} (${username}).`);
+      }
+    }
+  } catch (err) {
+    p(err);
+  }
+});
 
 /**
  * Creates a new global interaction command for the bot.
