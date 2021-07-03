@@ -6,9 +6,9 @@
 
 A standalone bot built against "join, spam & leave" type of spam bots that are very common in Discord.
 
-The solution this bot provides is basically a Discord-suitable captcha. By default the server is set to not allow speaking without some specific role. Discaptcha bot then automatically approaches the new clients and one-by-one verifies that they aren't spam bots, giving them the required role for speaking. It's that simple.
+The solution this bot provides is basically a Discord-suitable captcha. By default the server is set to not allow speaking without some specific role. Discaptcha bot then automatically approaches new clients and one-by-one verifies that they aren't spam bots, giving them the required role for speaking. It's that simple.
 
-This bot is standalone, meaning that you are required to have a machine where the bot can live and run.
+This bot is standalone, meaning that you are required to have a server machine where the bot can live and run.
 
 ## Installation
 
