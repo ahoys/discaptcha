@@ -20,10 +20,9 @@ It takes about 5-15 mins to install the bot.
 4. [Download the newest Discaptcha release](https://github.com/ahoys/discaptcha/releases) and extract it to somewhere.
 5. Run `npm install` in the extraction folder.
 6. Open the `.env`-file inside the extraction folder (it may be hidden on some OSes) and read the [configuration section](https://github.com/ahoys/discaptcha#Configuration) below.
-7. Invite the bot to your server(s) with your web browser. You can do this with the OAuth2 URL Generator in Discord Developer Portal > your application > OAuth2. **Make sure to check "applications.commands" to enable bot interactions.**
+7. Invite the bot to your server(s) with your web browser. You can do this with the OAuth2 URL Generator in Discord Developer Portal > your application > OAuth2. **Make sure to check "applications.commands", "bot" and "Administrator".**
 8. Run `node discaptcha` to start the bot. The bot should now appear online.
-9. Create a new server role "bots" or similar and give it to the bot. The role should be on top of the other roles and have an "Administrator" permission enabled.
-10. Give the bot a command to install itself: `/install`. This is done via slash commands. The command must be executed on all servers where you want to use the bot. Do note that the process may take quite a while on large servers as the bot will give the verified role to all users.
+9. Give the bot a command to install itself: `/install`. This is done via slash commands. The command must be executed on all servers where you want to use the bot. Do note that the process may take quite a while on large servers as the bot will give the verified role to all users.
 
 That's all. Discaptcha is now functional. Try it out with `/verifyme`.
 
@@ -76,7 +75,7 @@ For testing purposes, you can use this interaction to see how the bot greets new
 
 ## Permissions
 
-The bot requires the "Administrator" permission and the role should be on top of the other roles (first priority).
+The bot requires the "Administrator" permission.
 
 Security wise, it's a good idea to give this role only to Discaptcha.
 
@@ -89,11 +88,12 @@ Security wise, it's a good idea to give this role only to Discaptcha.
 ## FAQ
 
 - The bot joined but doesn't function.
-  - Make sure the bot has the bot role set.
-  - Make sure the bot role has the required permissions to function in your guild. It should have the `Administrator` permission set.
+  - Make sure the bot has the correct role permissions. It should have the `Administrator` flag enabled.
   - Make sure your .env file has the values properly set.
   - See if the bot's console shows anything useful. If not, the connection may be broken, triple check the .env file.
 - The bot does not give the verified-role to users.
-  - This is most likely a permission issue. See your discord server's roles. The bot should have administrator permissions and no other role should override it.
+  - This is most likely a permission issue. See your discord server's roles. The bot should have the administrator permission enabled and no other role should override it. Repeat the installation step 7.
   - In the Discord applications page, make sure the bot has the "SERVER MEMBERS INTENT" setting enabled under the "Bot" page.
   - Try executing the `/install` slash command again. The bot should give you information if the installation was successful.
+- The slash commands are not showing.
+  - The most likely scenario is that Discaptcha does not have the required permissions. Repeat the installation step 7.
