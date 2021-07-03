@@ -35,7 +35,8 @@ export const verifyMember = (
                     reaction.emoji.name === '👌' ||
                     reaction.emoji.name === '💩',
                   {
-                    time: 60000,
+                    // 15 mins.
+                    time: 900000,
                   }
                 );
                 collector.on('collect', () => {
