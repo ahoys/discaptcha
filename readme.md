@@ -19,19 +19,19 @@ It takes about 5-15 mins to install the bot.
 3. [Install Node.js if not already.](https://nodejs.org/en/)
 4. [Download the newest Discaptcha release](https://github.com/ahoys/discaptcha/releases) and extract it to somewhere.
 5. Run `npm install` in the extraction folder.
-6. Open the `.env` inside the extraction folder (it may be hidden on some OSes) and read the [configuration section](https://github.com/ahoys/discaptcha#Configuration) below.
-7. Invite the bot to your server(s) with your web browser. Use the following url: https://discordapp.com/oauth2/authorize?&client_id=YOUR_APP_CLIENT_ID_HERE&scope=bot&permissions=0 (Replace YOUR_APP_CLIENT_ID_HERE with the application id of the bot (see step 2)).
-8. Use command `node discaptcha` to run the bot. It should now appear online in your server(s).
+6. Open the `.env`-file inside the extraction folder (it may be hidden on some OSes) and read the [configuration section](https://github.com/ahoys/discaptcha#Configuration) below.
+7. Invite the bot to your server(s) with your web browser. You can do this with the OAuth2 URL Generator in Discord Developer Portal > your application > OAuth2. **Make sure to check "applications.commands" to enable bot interactions.**
+8. Run `node discaptcha` to start the bot. The bot should now appear online.
 9. Create a new server role "bots" or similar and give it to the bot. The role should be on top of the other roles and have an "Administrator" permission enabled.
-10. Give the bot a command to install itself: `@Discaptcha install`. This must be done on all servers (guilds) where you want to use the bot. Do note that the process may take quite a while on large servers as the bot will give the verified role to all users.
+10. Give the bot a command to install itself: `/install`. This is done via slash commands. The command must be executed on all servers where you want to use the bot. Do note that the process may take quite a while on large servers as the bot will give the verified role to all users.
 
-That's all. Discaptcha is now functional. Type `@Discaptcha help` for a list of commands. You must always mention the bot to activate a command.
+That's all. Discaptcha is now functional. Try it out with `/verifyme`.
 
 _Tip: Use a separate hidden channel to test your bots._
 
 ## Configuration
 
-In order to use the bot, you are required to link the bot to the Discord application you created in the installation step 2. This linking is done by providing the bot some key values via an `.env`-file.
+In order to use the bot, you are required to link the bot to the Discord application you created in the installation step 2. This linking is done by providing the bot some key values via an `.env`-file that can be edited with a text editor.
 
 _Note that some OSes may hide the file by default._
 
@@ -47,28 +47,32 @@ Replace all `replace_me` values with actual values. Most of the values can be fo
 - APP_ID: id of the application.
 - OWNER_ID: your Discord id.
 - OWNER_ROLE: optional role id. All users with this role can control the bot.
-- ROLE_NAME: optional custom name for the verified-role. By default: verified.
+- ROLE_NAME: optional custom name for the verified-role. By default: Verified.
 
-## Commands
+## Commands (interactions)
 
-`@Discaptcha install`
+`/install`
 Installs Discaptcha bot for the guild.
 
 1. Removes the old verified role (of the same name).
 2. Creates a new verified role with the correct permissions.
 3. Assigns the role to everyone (this may take a while).
-4. Disables writing and speaking permissions of `@everyone` role.
+4. Disables writing and speaking permissions of the `@everyone` role.
 
-`@Discaptcha humanize`
-Makes sure all the members on the server have the verified role. In case you have already installed Discaptcha once, this is much faster than re-installing.
+`/humanize`
+Makes sure all members on the server have the verified role. In case you have already installed Discaptcha once, this is much faster than re-installing.
 
 - Skips members who already got the role.
+- Be careful, this may mark bots as humans.
 
-`@Discaptcha uninstall`
+`/uninstall`
 Removes Discaptcha bot's configurations. Useful when you are removing the bot from the server.
 
-1. Enables writing and speaking permissions of `@everyone` role.
+1. Enables writing and speaking permissions of the `@everyone` role.
 2. Removes the verified role (this will remove the role from the members too).
+
+`/verifyme`
+For testing purposes, you can use this interaction to see how the bot greets new visitors.
 
 ## Permissions
 
@@ -78,7 +82,9 @@ Security wise, it's a good idea to give this role only to Discaptcha.
 
 ## Security
 
-This bot shares information with the Discord API only. The bot may generate log that may contain usernames and ids but the logs are not shared. As much as possible is done in-memory and there are no bot specific databases involved.
+- This bot shares (mandatory) information with the official Discord API only.
+- The bot is incapable of reading user messages.
+- The terminal may display usernames or ids. This can help you to hunt down troublemakers.
 
 ## FAQ
 
@@ -86,8 +92,8 @@ This bot shares information with the Discord API only. The bot may generate log 
   - Make sure the bot has the bot role set.
   - Make sure the bot role has the required permissions to function in your guild. It should have the `Administrator` permission set.
   - Make sure your .env file has the values properly set.
-  - See if the bot's console shows anything or if the bot reacts to mentions. If not, the connection is broken, see the .env file.
+  - See if the bot's console shows anything useful. If not, the connection may be broken, triple check the .env file.
 - The bot does not give the verified-role to users.
   - This is most likely a permission issue. See your discord server's roles. The bot should have administrator permissions and no other role should override it.
   - In the Discord applications page, make sure the bot has the "SERVER MEMBERS INTENT" setting enabled under the "Bot" page.
-  - Try running `@<bot's name> install` command again.
+  - Try executing the `/install` slash command again. The bot should give you information if the installation was successful.
