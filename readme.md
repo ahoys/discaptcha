@@ -15,7 +15,7 @@ This bot is standalone, meaning that you are required to have a server machine w
 It takes about 5-15 mins to install the bot.
 
 1. [Create a new Discord application for the bot.](https://discordapp.com/developers/applications/)
-2. In the same developers center, under "Bot", make sure you have "SERVER MEMBERS INTENT" enabled.
+2. In the same Developer Portal, under "Bot", make sure you have "SERVER MEMBERS INTENT" enabled.
 3. [Install Node.js if not already.](https://nodejs.org/en/)
 4. [Download the newest Discaptcha release](https://github.com/ahoys/discaptcha/releases) and extract it to somewhere.
 5. Run `npm install` in the extraction folder.
@@ -77,7 +77,7 @@ For testing purposes, you can use this interaction to see how the bot greets new
 
 The bot requires the "Administrator" permission.
 
-Security wise, it's a good idea to give this role only to Discaptcha.
+Security-wise, it's a good idea to give this role only to Discaptcha.
 
 ## Security
 
@@ -90,9 +90,9 @@ Security wise, it's a good idea to give this role only to Discaptcha.
 - The bot joined but doesn't function.
   - Make sure the bot has the correct role permissions. It should have the `Administrator` flag enabled.
   - Make sure your .env file has the values properly set.
-  - See if the bot's console shows anything useful. If not, the connection may be broken, triple check the .env file.
+  - See if the bot's console shows anything useful. If not, the connection may be broken, triple-check the .env file.
 - The bot does not give the verified-role to users.
-  - This is most likely a permission issue. See your discord server's roles. The bot should have the administrator permission enabled and no other role should override it. Repeat the installation step 7.
+  - This is most likely a permission issue. See your Discord server's roles. The bot should have the administrator permission enabled and no other role should override it. Repeat installation step 7.
   - In the Discord applications page, make sure the bot has the "SERVER MEMBERS INTENT" setting enabled under the "Bot" page.
   - Try executing the `/install` slash command again. The bot should give you information if the installation was successful.
 - The slash commands are not showing.
