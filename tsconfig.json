@@ -6,6 +6,7 @@
     "declaration": false,
     "sourceMap": false,
     "outDir": "./build",
+    "newLine": "lf",
     "removeComments": true,
     "strict": true,
     "esModuleInterop": true,
